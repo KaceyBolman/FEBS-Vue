@@ -22,4 +22,8 @@ public class MD5Util {
 				HASH_ITERATIONS).toHex();
 	}
 
+	public static void main(String[] args) {
+		System.out.println(encrypt("mrbird","1234qwer"));
+	}
+
 }
