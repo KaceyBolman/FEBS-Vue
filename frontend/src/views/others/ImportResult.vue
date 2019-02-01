@@ -104,7 +104,6 @@ export default {
           arr.push(e)
         }
       }
-      console.log(arr)
       return arr
     },
     successColumns () {
