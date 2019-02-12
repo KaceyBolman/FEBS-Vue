@@ -33,12 +33,13 @@ public class TestServiceImpl extends BaseService<Test> implements TestService {
             example.setOrderByClause("create_time desc");
             return this.selectByExample(example);
         }catch (Exception e){
-            log.error("获取角色信息失败", e);
+            log.error("获取信息失败", e);
             return new ArrayList<>();
         }
     }
 
     @Override
+    @Transactional
     public void batchInsert(List<Test> list) {
         int total = list.size();
         int max = batchInsertMaxNum;

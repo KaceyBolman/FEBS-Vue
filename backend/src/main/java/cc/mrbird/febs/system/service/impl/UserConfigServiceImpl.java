@@ -6,12 +6,14 @@ import cc.mrbird.febs.system.domain.UserConfig;
 import cc.mrbird.febs.system.service.UserConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
 
 @Service("userConfigService")
+@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class UserConfigServiceImpl extends BaseService<UserConfig> implements UserConfigService {
 
     @Autowired
