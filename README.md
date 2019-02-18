@@ -26,6 +26,40 @@ mrbird | 进群获取 |超级管理员，拥有所有增删改查权限
 scott | 1234qwer | 注册账号，拥有查看，新增导出等权限，但不能新增用户
 jack | 1234qwer |普通账户，仅拥有所有页面查看权限
 mrbird | 1234qwer |超级管理员，拥有所有增删改查权限
+
+### 使用教程
+
+#### 后端
+
+1. IDEA 或者 Eclipse安装lombok插件
+
+2. 新建MySQL（版本5.7.x）数据库，导入[SQL](https://github.com/wuyouzhuguli/FEBS-Vue/blob/master/sql/febs.sql)文件
+
+3. 导入项目
+
+4. 修改数据库配置，redis配置，等待Maven下载依赖
+
+5. 启动项目
+
+#### 前端
+
+切换到front文件夹下
+```
+# 安装yarn
+npm install -g yarn
+
+# 下载依赖
+yarn install
+
+# 启动
+yarn start
+
+# 编译
+yarn build
+```
+
+> 详细文档编写中...
+
 ### 功能模块
 ```
 ├─系统管理
@@ -110,38 +144,6 @@ v-hasAnyRole | 当用户拥有列出的任意一个角色的时候，渲染该�
 
 ![10.png](images/10.png)
 
-### 使用教程
-
-#### 后端
-
-1. IDEA 或者 Eclipse安装lombok插件
-
-2. 新建MySQL（版本5.7.x）数据库，导入[SQL](https://github.com/wuyouzhuguli/FEBS-Vue/blob/master/sql/febs.sql)文件
-
-3. 导入项目
-
-4. 修改数据库配置，redis配置，等待Maven下载依赖
-
-5. 启动项目
-
-#### 前端
-
-切换到front文件夹下
-```
-# 安装yarn
-npm install -g yarn
-
-# 下载依赖
-yarn install
-
-# 启动
-yarn start
-
-# 编译
-yarn build
-```
-
-> 详细文档编写中...
 ### 鸣谢
 
 感谢以下优秀的开源项目：
