@@ -43,7 +43,9 @@ mrbird | 1234qwer |超级管理员，拥有所有增删改查权限
 
 #### 前端
 
-切换到frontend文件夹下
+1. 安装node.js
+
+2. 切换到frontend文件夹下
 ```
 # 安装yarn
 npm install -g yarn
@@ -53,7 +55,6 @@ yarn install
 
 # 启动
 yarn start
-
 ```
 
 > 详细文档编写中...
