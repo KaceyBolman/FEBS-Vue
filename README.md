@@ -35,15 +35,15 @@ mrbird | 1234qwer |超级管理员，拥有所有增删改查权限
 
 2. 新建MySQL（版本5.7.x）数据库，导入[SQL](https://github.com/wuyouzhuguli/FEBS-Vue/blob/master/sql/febs.sql)文件
 
-3. 导入项目
+3. 导入[backend项目](https://github.com/wuyouzhuguli/FEBS-Vue/tree/master/backend)
 
 4. 修改数据库配置，redis配置，等待Maven下载依赖
 
-5. 启动项目
+5. 启动backend项目
 
 #### 前端
 
-切换到front文件夹下
+切换到frontend文件夹下
 ```
 # 安装yarn
 npm install -g yarn
@@ -54,8 +54,6 @@ yarn install
 # 启动
 yarn start
 
-# 编译
-yarn build
 ```
 
 > 详细文档编写中...
