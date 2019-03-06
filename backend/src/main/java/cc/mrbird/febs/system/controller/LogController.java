@@ -6,6 +6,7 @@ import cc.mrbird.febs.common.domain.QueryRequest;
 import cc.mrbird.febs.common.exception.FebsException;
 import cc.mrbird.febs.system.domain.SysLog;
 import cc.mrbird.febs.system.service.LogService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wuwenze.poi.ExcelKit;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -31,8 +32,9 @@ public class LogController extends BaseController {
 
     @GetMapping
     @RequiresPermissions("log:view")
-    public Map<String, Object> logList(QueryRequest request, SysLog log) {
-        return super.selectByPageNumSize(request, () -> this.logService.findLogs(request, log));
+    public Map<String, Object> logList(QueryRequest request, SysLog sysLog) {
+        Page page = new Page(request.getPageNum(), request.getPageSize());
+        return getDataTable(logService.findLogs(page, sysLog));
     }
 
     @Log("删除系统日志")
@@ -51,9 +53,9 @@ public class LogController extends BaseController {
 
     @PostMapping("excel")
     @RequiresPermissions("log:export")
-    public void export(SysLog sysLog, QueryRequest request, HttpServletResponse response) throws FebsException {
+    public void export(Page page, SysLog sysLog, HttpServletResponse response) throws FebsException {
         try {
-            List<SysLog> sysLogs = this.logService.findLogs(request, sysLog);
+            List<SysLog> sysLogs = this.logService.findLogs(page, sysLog).getRecords();
             ExcelKit.$Export(SysLog.class, response).downXlsx(sysLogs, false);
         } catch (Exception e) {
             message = "导出Excel失败";

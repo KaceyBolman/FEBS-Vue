@@ -31,7 +31,7 @@ public class JobLogController extends BaseController {
     @GetMapping
     @RequiresPermissions("jobLog:view")
     public Map<String, Object> jobLogList(QueryRequest request, JobLog log) {
-        return super.selectByPageNumSize(request, () -> this.jobLogService.findJobLogs(request, log));
+        return getDataTable(this.jobLogService.findJobLogs(request, log));
     }
 
     @DeleteMapping("/{jobIds}")
@@ -49,9 +49,9 @@ public class JobLogController extends BaseController {
 
     @PostMapping("excel")
     @RequiresPermissions("jobLog:export")
-    public void export(JobLog jobLog, QueryRequest request, HttpServletResponse response) throws FebsException {
+    public void export(QueryRequest request, JobLog jobLog, HttpServletResponse response) throws FebsException {
         try {
-            List<JobLog> jobLogs = this.jobLogService.findJobLogs(request, jobLog);
+            List<JobLog> jobLogs = this.jobLogService.findJobLogs(request, jobLog).getRecords();
             ExcelKit.$Export(JobLog.class, response).downXlsx(jobLogs, false);
         } catch (Exception e) {
             message = "导出Excel失败";
