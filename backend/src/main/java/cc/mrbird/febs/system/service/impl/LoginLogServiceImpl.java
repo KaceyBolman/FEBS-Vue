@@ -1,11 +1,12 @@
 package cc.mrbird.febs.system.service.impl;
 
-import cc.mrbird.febs.common.service.impl.BaseService;
 import cc.mrbird.febs.common.utils.AddressUtil;
 import cc.mrbird.febs.common.utils.HttpContextUtil;
 import cc.mrbird.febs.common.utils.IPUtil;
+import cc.mrbird.febs.system.dao.LoginLogMapper;
 import cc.mrbird.febs.system.domain.LoginLog;
 import cc.mrbird.febs.system.service.LoginLogService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +16,7 @@ import java.util.Date;
 
 @Service("loginLogService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class LoginLogServiceImpl extends BaseService<LoginLog> implements LoginLogService {
+public class LoginLogServiceImpl extends ServiceImpl<LoginLogMapper, LoginLog> implements LoginLogService {
 
     @Override
     @Transactional

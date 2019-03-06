@@ -40,32 +40,25 @@
         LEFT JOIN t_user_role ur ON (u.user_id = ur.user_id)
         LEFT JOIN t_role r ON r.role_id = ur.role_id
         WHERE 1 = 1
-        <if test="username != null and username != ''">
-            AND u.username = #{username}
+        <if test="query.username != null and query.username != ''">
+            AND u.username = #{query.username}
         </if>
-        <if test="deptId != null and deptId != ''">
-            AND d.dept_id = #{deptId}
+        <if test="query.deptId != null and query.deptId != ''">
+            AND d.dept_id = #{query.deptId}
         </if>
-        <if test="createTimeFrom != null and createTimeFrom !=''">
-            And u.create_time &gt; #{createTimeFrom}
+        <if test="query.createTimeFrom != null and query.createTimeFrom !=''">
+            And u.create_time &gt; #{query.createTimeFrom}
         </if>
-        <if test="createTimeTo!= null and createTimeTo !=''">
-            And u.create_time &lt; #{createTimeTo}
+        <if test="query.createTimeTo!= null and query.createTimeTo !=''">
+            And u.create_time &lt; #{query.createTimeTo}
         </if>
-        <if test="ssex != null and ssex != ''">
-            AND u.ssex = #{ssex}
+        <if test="query.ssex != null and query.ssex != ''">
+            AND u.ssex = #{query.ssex}
         </if>
-        <if test="status != null and status != ''">
-            AND u.status = #{status}
+        <if test="query.status != null and query.status != ''">
+            AND u.status = #{query.status}
         </if>
         group by u.username
-        <choose>
-            <when test="sortField != null and sortField != '' and sortField != 'undefined' and sortOrder != null and sortOrder != '' and sortOrder != 'undefined'">
-                ORDER BY ${sortField} ${sortOrder}
-            </when>
-            <otherwise>
-                ORDER BY u.user_id
-            </otherwise>
-        </choose>
+
     </select>
 </mapper>

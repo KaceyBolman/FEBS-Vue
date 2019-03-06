@@ -33,7 +33,7 @@ public class DictController extends BaseController {
     @GetMapping
     @RequiresPermissions("dict:view")
     public Map<String, Object> DictList(QueryRequest request, Dict dict) {
-        return super.selectByPageNumSize(request, () -> this.dictService.findDicts(request, dict));
+        return getDataTable(this.dictService.findDicts(request, dict));
     }
 
     @Log("新增字典")
@@ -78,9 +78,9 @@ public class DictController extends BaseController {
 
     @PostMapping("excel")
     @RequiresPermissions("dict:export")
-    public void export(Dict dict, QueryRequest request, HttpServletResponse response) throws FebsException {
+    public void export(QueryRequest request, Dict dict, HttpServletResponse response) throws FebsException {
         try {
-            List<Dict> dicts = this.dictService.findDicts(request, dict);
+            List<Dict> dicts = this.dictService.findDicts(request, dict).getRecords();
             ExcelKit.$Export(Dict.class, response).downXlsx(dicts, false);
         } catch (Exception e) {
             message = "导出Excel失败";
