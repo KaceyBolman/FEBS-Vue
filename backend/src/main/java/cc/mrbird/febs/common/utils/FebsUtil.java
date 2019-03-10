@@ -7,10 +7,10 @@ import cc.mrbird.febs.common.function.CacheSelector;
 import cc.mrbird.febs.common.service.CacheService;
 import cc.mrbird.febs.system.domain.User;
 import cc.mrbird.febs.system.service.UserService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
-import tk.mybatis.mapper.entity.Example;
 
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
@@ -32,7 +32,7 @@ public class FebsUtil {
     public static <T> T selectCacheByTemplate(CacheSelector<?> cacheSelector, Supplier<?> databaseSelector) {
         try {
             // 先查 Redis缓存
-            log.info("query data from redis ······");
+            log.info("query data from redis ······"+cacheSelector.select());
             return (T) cacheSelector.select();
         } catch (Exception e) {
             // 数据库查询
@@ -111,26 +111,25 @@ public class FebsUtil {
     }
 
     /**
-     * 处理排序逻辑
+     * 处理排序-分页逻辑 for mybatis-plus
      *
      * @param request     QueryRequest
-     * @param example     Example
+     * @param page     Page
      * @param defaultSort 默认排序的字段
      */
-    public static void handleSort(QueryRequest request, Example example, String defaultSort) {
+    public static void handleSort(QueryRequest request, Page page, String defaultSort) {
+        page.setCurrent(request.getPageNum());
+        page.setSize(request.getPageSize());
         if (StringUtils.isNotBlank(request.getSortField())
                 && StringUtils.isNotBlank(request.getSortOrder())
                 && !StringUtils.equalsIgnoreCase(request.getSortField(), "undefined")
                 && !StringUtils.equalsIgnoreCase(request.getSortOrder(), "undefined")) {
-            String orderCase;
             if (StringUtils.equals(request.getSortOrder(), "ascend"))
-                orderCase = "asc";
+                page.setAsc(request.getSortField());
             else
-                orderCase = "desc";
-            String orderField = camelToUnderscore(request.getSortField());
-            example.setOrderByClause(orderField + " " + orderCase);
+                page.setDesc(request.getSortField());
         } else {
-            example.setOrderByClause(defaultSort);
+            //page.setDesc(StringUtils.isNotBlank(defaultSort)?defaultSort:"create_time");
         }
     }
 }

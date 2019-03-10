@@ -1,39 +1,38 @@
 package cc.mrbird.febs.system.service.impl;
 
-import cc.mrbird.febs.common.service.impl.BaseService;
+import cc.mrbird.febs.system.dao.RoleMenuMapper;
 import cc.mrbird.febs.system.domain.RoleMenu;
 import cc.mrbird.febs.system.service.RoleMenuServie;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import tk.mybatis.mapper.entity.Example;
 
 import java.util.Arrays;
 import java.util.List;
 
 @Service("roleMenuService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class RoleMenuServiceImpl extends BaseService<RoleMenu> implements RoleMenuServie {
+public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> implements RoleMenuServie {
 
 	@Override
 	@Transactional
 	public void deleteRoleMenusByRoleId(String[] roleIds) {
 		List<String> list = Arrays.asList(roleIds);
-		this.batchDelete(list, "roleId", RoleMenu.class);
+		baseMapper.delete(new QueryWrapper<RoleMenu>().lambda().in(RoleMenu::getRoleId, list));
 	}
 
 	@Override
 	@Transactional
 	public void deleteRoleMenusByMenuId(String[] menuIds) {
 		List<String> list = Arrays.asList(menuIds);
-		this.batchDelete(list, "menuId", RoleMenu.class);
+		baseMapper.delete(new QueryWrapper<RoleMenu>().lambda().in(RoleMenu::getMenuId, list));
 	}
 
 	@Override
 	public List<RoleMenu> getRoleMenusByRoleId(String roleId) {
-		Example example = new Example(RoleMenu.class);
-		example.createCriteria().andCondition("role_id=",roleId);
-		return this.selectByExample(example);
+		return baseMapper.selectList(new QueryWrapper<RoleMenu>().lambda().eq(RoleMenu::getRoleId, roleId));
 	}
 
 }

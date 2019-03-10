@@ -39,7 +39,7 @@ public class CacheInitRunner implements CommandLineRunner {
 
             log.info("缓存初始化 ······");
             log.info("缓存用户数据 ······");
-            List<User> list = this.userMapper.findUserDetail(null);
+            List<User> list = this.userMapper.findUserDetail(new User());
             for (User user : list) {
                 userManager.loadUserRedisCache(user);
             }
