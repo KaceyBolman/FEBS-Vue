@@ -7,6 +7,7 @@ import cc.mrbird.febs.system.dao.LoginLogMapper;
 import cc.mrbird.febs.system.domain.LoginLog;
 import cc.mrbird.febs.system.service.LoginLogService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.lionsoul.ip2region.DbSearcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class LoginLogServiceImpl extends ServiceImpl<LoginLogMapper, LoginLog> i
         HttpServletRequest request = HttpContextUtil.getHttpServletRequest();
         String ip = IPUtil.getIpAddr(request);
         loginLog.setIp(ip);
-        loginLog.setLocation(AddressUtil.getCityInfo(ip));
+        loginLog.setLocation(AddressUtil.getCityInfo(DbSearcher.BTREE_ALGORITHM, ip));
         this.save(loginLog);
     }
 }

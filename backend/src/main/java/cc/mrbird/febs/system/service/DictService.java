@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface DictService extends IService<Dict> {
 
-    IPage findDicts(QueryRequest request, Dict dict);
+    IPage<Dict> findDicts(QueryRequest request, Dict dict);
 
     void createDict(Dict dict);
 

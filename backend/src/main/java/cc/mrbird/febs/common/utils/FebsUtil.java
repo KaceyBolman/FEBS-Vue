@@ -32,12 +32,12 @@ public class FebsUtil {
     public static <T> T selectCacheByTemplate(CacheSelector<?> cacheSelector, Supplier<?> databaseSelector) {
         try {
             // 先查 Redis缓存
-            log.info("query data from redis ······"+cacheSelector.select());
+            log.debug("query data from redis ······");
             return (T) cacheSelector.select();
         } catch (Exception e) {
             // 数据库查询
             log.error("redis error：", e);
-            log.info("query data from database ······");
+            log.debug("query data from database ······");
             return (T) databaseSelector.get();
         }
     }
@@ -114,7 +114,7 @@ public class FebsUtil {
      * 处理排序-分页逻辑 for mybatis-plus
      *
      * @param request     QueryRequest
-     * @param page     Page
+     * @param page        Page
      * @param defaultSort 默认排序的字段
      */
     public static void handleSort(QueryRequest request, Page page, String defaultSort) {

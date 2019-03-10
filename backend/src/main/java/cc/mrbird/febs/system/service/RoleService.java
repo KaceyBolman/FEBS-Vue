@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface RoleService extends IService<Role> {
 
-    IPage findRoles(Role role, QueryRequest request);
+    IPage<Role> findRoles(Role role, QueryRequest request);
 
     List<Role> findUserRole(String userName);
 

@@ -7,7 +7,8 @@ import cc.mrbird.febs.system.domain.User;
 import cc.mrbird.febs.system.manager.UserManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-public class CacheInitRunner implements CommandLineRunner {
+public class CacheInitRunner implements ApplicationRunner {
 
     @Autowired
     private UserMapper userMapper;
@@ -32,7 +33,7 @@ public class CacheInitRunner implements CommandLineRunner {
     private ConfigurableApplicationContext context;
 
     @Override
-    public void run(String... args) {
+    public void run(ApplicationArguments args) {
         try {
             log.info("Redis连接中 ······");
             cacheService.testConnect();

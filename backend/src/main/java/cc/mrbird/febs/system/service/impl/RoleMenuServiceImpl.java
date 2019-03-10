@@ -3,6 +3,7 @@ package cc.mrbird.febs.system.service.impl;
 import cc.mrbird.febs.system.dao.RoleMenuMapper;
 import cc.mrbird.febs.system.domain.RoleMenu;
 import cc.mrbird.febs.system.service.RoleMenuServie;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -20,19 +21,19 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
 	@Transactional
 	public void deleteRoleMenusByRoleId(String[] roleIds) {
 		List<String> list = Arrays.asList(roleIds);
-		baseMapper.delete(new QueryWrapper<RoleMenu>().lambda().in(RoleMenu::getRoleId, list));
+		baseMapper.delete(new LambdaQueryWrapper<RoleMenu>().in(RoleMenu::getRoleId, list));
 	}
 
 	@Override
 	@Transactional
 	public void deleteRoleMenusByMenuId(String[] menuIds) {
 		List<String> list = Arrays.asList(menuIds);
-		baseMapper.delete(new QueryWrapper<RoleMenu>().lambda().in(RoleMenu::getMenuId, list));
+		baseMapper.delete(new LambdaQueryWrapper<RoleMenu>().in(RoleMenu::getMenuId, list));
 	}
 
 	@Override
 	public List<RoleMenu> getRoleMenusByRoleId(String roleId) {
-		return baseMapper.selectList(new QueryWrapper<RoleMenu>().lambda().eq(RoleMenu::getRoleId, roleId));
+		return baseMapper.selectList(new LambdaQueryWrapper<RoleMenu>().eq(RoleMenu::getRoleId, roleId));
 	}
 
 }

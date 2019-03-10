@@ -19,11 +19,11 @@ public interface UserService extends IService<User> {
     /**
      * 查询用户详情，包括基本信息，用户角色，用户部门
      *
-     * @param user
-     * @param queryRequest
+     * @param user user
+     * @param queryRequest queryRequest
      * @return IPage
      */
-    IPage findUserDetail(User user, QueryRequest queryRequest);
+    IPage<User> findUserDetail(User user, QueryRequest queryRequest);
 
     /**
      * 更新用户登录时间

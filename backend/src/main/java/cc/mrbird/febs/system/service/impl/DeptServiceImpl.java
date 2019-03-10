@@ -6,7 +6,7 @@ import cc.mrbird.febs.common.utils.TreeUtil;
 import cc.mrbird.febs.system.dao.DeptMapper;
 import cc.mrbird.febs.system.domain.Dept;
 import cc.mrbird.febs.system.service.DeptService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -42,19 +42,17 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Dept> findDepts(Dept dept, QueryRequest request) {
-        QueryWrapper<Dept> queryWrapper = new QueryWrapper<>();
+        LambdaQueryWrapper<Dept> queryWrapper = new LambdaQueryWrapper<>();
 
-        if (StringUtils.isNotBlank(dept.getDeptName())) {
-            queryWrapper.lambda().eq(Dept::getDeptName, dept.getDeptName());
-        }
-        if (StringUtils.isNotBlank(dept.getCreateTimeFrom()) && StringUtils.isNotBlank(dept.getCreateTimeTo())) {
-            queryWrapper.lambda()
+        if (StringUtils.isNotBlank(dept.getDeptName()))
+            queryWrapper.eq(Dept::getDeptName, dept.getDeptName());
+        if (StringUtils.isNotBlank(dept.getCreateTimeFrom()) && StringUtils.isNotBlank(dept.getCreateTimeTo()))
+            queryWrapper
                     .ge(Dept::getCreateTime, dept.getCreateTimeFrom())
                     .le(Dept::getCreateTime, dept.getCreateTimeTo());
-        }
-        queryWrapper.lambda().orderByAsc(Dept::getOrderNum);
-
+        queryWrapper.orderByAsc(Dept::getOrderNum);
         return this.baseMapper.selectList(queryWrapper);
     }
 

@@ -37,7 +37,7 @@ public class TestController extends BaseController {
 
     @GetMapping
     public Map<String, Object> findTests(QueryRequest request) {
-        Page page = new Page(request.getPageNum(), request.getPageSize());
+        Page<Test> page = new Page<>(request.getPageNum(), request.getPageSize());
         return getDataTable(testService.page(page, null));
     }
 

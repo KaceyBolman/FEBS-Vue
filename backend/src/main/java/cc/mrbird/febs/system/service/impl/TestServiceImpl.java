@@ -24,9 +24,9 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test> implements Te
 
     @Override
     public List<Test> findTests() {
-        try{
+        try {
             return baseMapper.selectList(new QueryWrapper<Test>().orderByDesc("create_time"));
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("获取信息失败", e);
             return new ArrayList<>();
         }
@@ -47,11 +47,11 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test> implements Te
             int end = max * (i + 1);
             if (i != count) {
                 log.info("正在插入第" + (start + 1) + " ~ " + end + "条记录 ······");
-                saveBatch(list,end);
+                saveBatch(list, end);
             } else {
                 end = total;
                 log.info("正在插入第" + (start + 1) + " ~ " + end + "条记录 ······");
-                saveBatch(list,end);
+                saveBatch(list, end);
             }
         }
     }

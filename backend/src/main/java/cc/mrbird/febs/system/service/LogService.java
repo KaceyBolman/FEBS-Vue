@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.Async;
 
 public interface LogService extends IService<SysLog> {
 
-    IPage findLogs(Page page, SysLog sysLog);
+    IPage<SysLog> findLogs(Page<SysLog> page, SysLog sysLog);
 
     void deleteLogs(String[] logIds);
 

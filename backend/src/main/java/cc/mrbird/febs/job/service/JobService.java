@@ -10,7 +10,7 @@ public interface JobService extends IService<Job> {
 
     Job findJob(Long jobId);
 
-    IPage findJobs(QueryRequest request, Job job);
+    IPage<Job> findJobs(QueryRequest request, Job job);
 
     void createJob(Job job);
 

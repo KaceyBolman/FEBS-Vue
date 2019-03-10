@@ -7,7 +7,7 @@ import cc.mrbird.febs.system.dao.MenuMapper;
 import cc.mrbird.febs.system.domain.Menu;
 import cc.mrbird.febs.system.manager.UserManager;
 import cc.mrbird.febs.system.service.MenuService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -40,21 +40,9 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public Map<String, Object> findMenus(Menu menu) {
         Map<String, Object> result = new HashMap<>();
         try {
-            QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
-
-            if (StringUtils.isNotBlank(menu.getMenuName())) {
-                queryWrapper.lambda().eq(Menu::getMenuName, menu.getMenuName());
-            }
-            if (StringUtils.isNotBlank(menu.getType())) {
-                queryWrapper.lambda().eq(Menu::getType, menu.getType());
-            }
-            if (StringUtils.isNotBlank(menu.getCreateTimeFrom()) && StringUtils.isNotBlank(menu.getCreateTimeTo())) {
-                queryWrapper.lambda()
-                        .ge(Menu::getCreateTime, menu.getCreateTimeFrom())
-                        .le(Menu::getCreateTime, menu.getCreateTimeTo());
-            }
+            LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+            findMenuCondition(queryWrapper, menu);
             List<Menu> menus = baseMapper.selectList(queryWrapper);
-
 
             List<Tree<Menu>> trees = new ArrayList<>();
             List<String> ids = new ArrayList<>();
@@ -77,23 +65,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         return result;
     }
 
+
     @Override
+    @SuppressWarnings("unchecked")
     public List<Menu> findMenuList(Menu menu) {
-        QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
-
-        if (StringUtils.isNotBlank(menu.getMenuName())) {
-            queryWrapper.lambda().eq(Menu::getMenuName, menu.getMenuName());
-        }
-        if (StringUtils.isNotBlank(menu.getType())) {
-            queryWrapper.lambda().eq(Menu::getType, menu.getType());
-        }
-        if (StringUtils.isNotBlank(menu.getCreateTimeFrom()) && StringUtils.isNotBlank(menu.getCreateTimeTo())) {
-            queryWrapper.lambda()
-                    .ge(Menu::getCreateTime, menu.getCreateTimeFrom())
-                    .le(Menu::getCreateTime, menu.getCreateTimeTo());
-        }
-        queryWrapper.lambda().orderByAsc(Menu::getMenuId);
-
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        findMenuCondition(queryWrapper, menu);
+        queryWrapper.orderByAsc(Menu::getMenuId);
         return this.baseMapper.selectList(queryWrapper);
     }
 
@@ -101,13 +79,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Transactional
     public void createMenu(Menu menu) {
         menu.setCreateTime(new Date());
-        if (menu.getParentId() == null)
-            menu.setParentId(0L);
-        if (Menu.TYPE_BUTTON.equals(menu.getType())) {
-            menu.setPath(null);
-            menu.setIcon(null);
-            menu.setComponent(null);
-        }
+        setMenu(menu);
         this.save(menu);
     }
 
@@ -115,13 +87,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Transactional
     public void updateMenu(Menu menu) throws Exception {
         menu.setModifyTime(new Date());
-        if (menu.getParentId() == null)
-            menu.setParentId(0L);
-        if (Menu.TYPE_BUTTON.equals(menu.getType())) {
-            menu.setPath(null);
-            menu.setIcon(null);
-            menu.setComponent(null);
-        }
+        setMenu(menu);
         baseMapper.updateById(menu);
 
         // 查找与这些菜单/按钮关联的用户
@@ -163,4 +129,29 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             trees.add(tree);
         });
     }
+
+    private void setMenu(Menu menu) {
+        if (menu.getParentId() == null)
+            menu.setParentId(0L);
+        if (Menu.TYPE_BUTTON.equals(menu.getType())) {
+            menu.setPath(null);
+            menu.setIcon(null);
+            menu.setComponent(null);
+        }
+    }
+
+    private void findMenuCondition(LambdaQueryWrapper<Menu> queryWrapper, Menu menu) {
+        if (StringUtils.isNotBlank(menu.getMenuName())) {
+            queryWrapper.eq(Menu::getMenuName, menu.getMenuName());
+        }
+        if (StringUtils.isNotBlank(menu.getType())) {
+            queryWrapper.eq(Menu::getType, menu.getType());
+        }
+        if (StringUtils.isNotBlank(menu.getCreateTimeFrom()) && StringUtils.isNotBlank(menu.getCreateTimeTo())) {
+            queryWrapper
+                    .ge(Menu::getCreateTime, menu.getCreateTimeFrom())
+                    .le(Menu::getCreateTime, menu.getCreateTimeTo());
+        }
+    }
+
 }

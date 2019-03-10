@@ -6,6 +6,7 @@ import cc.mrbird.febs.common.domain.QueryRequest;
 import cc.mrbird.febs.common.exception.FebsException;
 import cc.mrbird.febs.system.domain.Dict;
 import cc.mrbird.febs.system.service.DictService;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.wuwenze.poi.ExcelKit;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -54,7 +55,7 @@ public class DictController extends BaseController {
     @RequiresPermissions("dict:delete")
     public void deleteDicts(@NotBlank(message = "{required}") @PathVariable String dictIds) throws FebsException {
         try {
-            String[] ids = dictIds.split(",");
+            String[] ids = dictIds.split(StringPool.COMMA);
             this.dictService.deleteDicts(ids);
         } catch (Exception e) {
             message = "删除字典成功";
