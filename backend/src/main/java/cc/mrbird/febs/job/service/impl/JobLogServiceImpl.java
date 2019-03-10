@@ -4,7 +4,7 @@ import cc.mrbird.febs.common.domain.QueryRequest;
 import cc.mrbird.febs.job.dao.JobLogMapper;
 import cc.mrbird.febs.job.domain.JobLog;
 import cc.mrbird.febs.job.service.JobLogService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -23,30 +23,30 @@ import java.util.List;
 public class JobLogServiceImpl extends ServiceImpl<JobLogMapper, JobLog> implements JobLogService {
 
     @Override
-    public IPage findJobLogs(QueryRequest request, JobLog jobLog) {
+    @SuppressWarnings("unchecked")
+    public IPage<JobLog> findJobLogs(QueryRequest request, JobLog jobLog) {
         try {
-            QueryWrapper<JobLog> queryWrapper = new QueryWrapper<>();
+            LambdaQueryWrapper<JobLog> queryWrapper = new LambdaQueryWrapper<>();
 
             if (StringUtils.isNotBlank(jobLog.getBeanName())) {
-                queryWrapper.lambda().eq(JobLog::getBeanName, jobLog.getBeanName());
+                queryWrapper.eq(JobLog::getBeanName, jobLog.getBeanName());
             }
             if (StringUtils.isNotBlank(jobLog.getMethodName())) {
-                queryWrapper.lambda().eq(JobLog::getMethodName, jobLog.getMethodName());
+                queryWrapper.eq(JobLog::getMethodName, jobLog.getMethodName());
             }
             if (StringUtils.isNotBlank(jobLog.getParams())) {
-                queryWrapper.lambda().like(JobLog::getParams, jobLog.getParams());
+                queryWrapper.like(JobLog::getParams, jobLog.getParams());
             }
             if (StringUtils.isNotBlank(jobLog.getStatus())) {
-                queryWrapper.lambda().eq(JobLog::getStatus, jobLog.getStatus());
+                queryWrapper.eq(JobLog::getStatus, jobLog.getStatus());
             }
-
             if (StringUtils.isNotBlank(jobLog.getCreateTimeFrom()) && StringUtils.isNotBlank(jobLog.getCreateTimeTo())) {
-                queryWrapper.lambda()
+                queryWrapper
                         .ge(JobLog::getCreateTime, jobLog.getCreateTimeFrom())
                         .le(JobLog::getCreateTime, jobLog.getCreateTimeTo());
             }
-            queryWrapper.lambda().orderByAsc(JobLog::getCreateTime);
-            Page page = new Page(request.getPageNum(), request.getPageSize());
+            queryWrapper.orderByAsc(JobLog::getCreateTime);
+            Page<JobLog> page = new Page<>(request.getPageNum(), request.getPageSize());
             return this.page(page, queryWrapper);
 
         } catch (Exception e) {

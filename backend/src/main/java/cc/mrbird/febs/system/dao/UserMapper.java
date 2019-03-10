@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface UserMapper extends BaseMapper<User> {
 
-	IPage<List<User>> findUserDetail(Page page, @Param("query") User user);
+	IPage<User> findUserDetail(Page page, @Param("query") User user);
 
 	List<User> findUserDetail(@Param("query") User user);
 }

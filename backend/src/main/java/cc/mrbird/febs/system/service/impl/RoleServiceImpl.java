@@ -10,8 +10,10 @@ import cc.mrbird.febs.system.manager.UserManager;
 import cc.mrbird.febs.system.service.RoleMenuServie;
 import cc.mrbird.febs.system.service.RoleService;
 import cc.mrbird.febs.system.service.UserRoleService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -40,20 +42,19 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     private UserManager userManager;
 
     @Override
-    public IPage findRoles(Role role, QueryRequest request) {
+    public IPage<Role> findRoles(Role role, QueryRequest request) {
         try {
-
-            QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
+            LambdaQueryWrapper<Role> queryWrapper = new LambdaQueryWrapper<>();
 
             if (StringUtils.isNotBlank(role.getRoleName())) {
-                queryWrapper.lambda().eq(Role::getRoleName, role.getRoleName());
+                queryWrapper.eq(Role::getRoleName, role.getRoleName());
             }
             if (StringUtils.isNotBlank(role.getCreateTimeFrom()) && StringUtils.isNotBlank(role.getCreateTimeTo())) {
-                queryWrapper.lambda()
+                queryWrapper
                         .ge(Role::getCreateTime, role.getCreateTimeFrom())
                         .le(Role::getCreateTime, role.getCreateTimeTo());
             }
-            Page page = new Page();
+            Page<Role> page = new Page<>();
             FebsUtil.handleSort(request, page, null);
             return this.page(page,queryWrapper);
         } catch (Exception e) {
@@ -77,7 +78,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         role.setCreateTime(new Date());
         this.save(role);
 
-        String[] menuIds = role.getMenuId().split(",");
+        String[] menuIds = role.getMenuId().split(StringPool.COMMA);
         setRoleMenus(role, menuIds);
     }
 
@@ -107,9 +108,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         role.setModifyTime(new Date());
         baseMapper.updateById(role);
 
-        roleMenuMapper.delete(new QueryWrapper<RoleMenu>().lambda().eq(RoleMenu::getRoleId, role.getRoleId()));
+        roleMenuMapper.delete(new LambdaQueryWrapper<RoleMenu>().eq(RoleMenu::getRoleId, role.getRoleId()));
 
-        String[] menuIds = role.getMenuId().split(",");
+        String[] menuIds = role.getMenuId().split(StringPool.COMMA);
         setRoleMenus(role, menuIds);
 
         // 重新将这些用户的角色和权限缓存到 Redis中

@@ -7,6 +7,7 @@ import cc.mrbird.febs.job.service.JobService;
 import cc.mrbird.febs.job.util.ScheduleUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +56,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
     }
 
     @Override
-    public IPage findJobs(QueryRequest request, Job job) {
+    @SuppressWarnings("unchecked")
+    public IPage<Job> findJobs(QueryRequest request, Job job) {
         try {
             QueryWrapper<Job> queryWrapper = new QueryWrapper<>();
 
@@ -81,7 +83,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
                         .le(Job::getCreateTime, job.getCreateTimeTo());
             }
             queryWrapper.lambda().orderByAsc(Job::getCreateTime);
-            Page page = new Page(request.getPageNum(), request.getPageSize());
+            Page<Job> page = new Page<>(request.getPageNum(), request.getPageSize());
             return this.page(page, queryWrapper);
         } catch (Exception e) {
             log.error("获取任务失败", e);
@@ -116,7 +118,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
     @Override
     @Transactional
     public int updateBatch(String jobIds, String status) {
-        List<String> list = Arrays.asList(jobIds.split(","));
+        List<String> list = Arrays.asList(jobIds.split(StringPool.COMMA));
         Job job = new Job();
         job.setStatus(status);
 
@@ -126,14 +128,14 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
     @Override
     @Transactional
     public void run(String jobIds) {
-        String[] list = jobIds.split(",");
+        String[] list = jobIds.split(StringPool.COMMA);
         Arrays.stream(list).forEach(jobId -> ScheduleUtils.run(scheduler, this.findJob(Long.valueOf(jobId))));
     }
 
     @Override
     @Transactional
     public void pause(String jobIds) {
-        String[] list = jobIds.split(",");
+        String[] list = jobIds.split(StringPool.COMMA);
         Arrays.stream(list).forEach(jobId -> ScheduleUtils.pauseJob(scheduler, Long.valueOf(jobId)));
         this.updateBatch(jobIds, Job.ScheduleStatus.PAUSE.getValue());
     }
@@ -141,7 +143,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
     @Override
     @Transactional
     public void resume(String jobIds) {
-        String[] list = jobIds.split(",");
+        String[] list = jobIds.split(StringPool.COMMA);
         Arrays.stream(list).forEach(jobId -> ScheduleUtils.resumeJob(scheduler, Long.valueOf(jobId)));
         this.updateBatch(jobIds, Job.ScheduleStatus.NORMAL.getValue());
     }

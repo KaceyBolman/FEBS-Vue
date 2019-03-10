@@ -5,6 +5,7 @@ import cc.mrbird.febs.common.domain.QueryRequest;
 import cc.mrbird.febs.common.exception.FebsException;
 import cc.mrbird.febs.job.domain.JobLog;
 import cc.mrbird.febs.job.service.JobLogService;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.wuwenze.poi.ExcelKit;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -38,7 +39,7 @@ public class JobLogController extends BaseController {
     @RequiresPermissions("jobLog:delete")
     public void deleteJobLog(@NotBlank(message = "{required}") @PathVariable String jobIds) throws FebsException {
         try {
-            String[] ids = jobIds.split(",");
+            String[] ids = jobIds.split(StringPool.COMMA);
             this.jobLogService.deleteJobLogs(ids);
         } catch (Exception e) {
             message = "删除调度日志失败";

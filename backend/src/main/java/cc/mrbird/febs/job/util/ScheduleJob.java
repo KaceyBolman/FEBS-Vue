@@ -16,11 +16,10 @@ import java.util.concurrent.Future;
 
 /**
  * 定时任务
- *
  */
 @Slf4j
 public class ScheduleJob extends QuartzJobBean {
-    
+
     private ExecutorService service = Executors.newSingleThreadExecutor();
 
     @Override
@@ -28,7 +27,7 @@ public class ScheduleJob extends QuartzJobBean {
         Job scheduleJob = (Job) context.getMergedJobDataMap().get(Job.JOB_PARAM_KEY);
 
         // 获取spring bean
-        JobLogService scheduleJobLogService = (JobLogService) SpringContextUtil.getBean("JobLogService");
+        JobLogService scheduleJobLogService = SpringContextUtil.getBean(JobLogService.class);
 
         JobLog jobLog = new JobLog();
         jobLog.setJobId(scheduleJob.getJobId());
@@ -49,7 +48,7 @@ public class ScheduleJob extends QuartzJobBean {
             long times = System.currentTimeMillis() - startTime;
             jobLog.setTimes(times);
             // 任务状态 0：成功 1：失败
-            jobLog.setStatus("0");
+            jobLog.setStatus(JobLog.JOB_SUCCESS);
 
             log.info("任务执行完毕，任务ID：{} 总共耗时：{} 毫秒", scheduleJob.getJobId(), times);
         } catch (Exception e) {
@@ -57,7 +56,7 @@ public class ScheduleJob extends QuartzJobBean {
             long times = System.currentTimeMillis() - startTime;
             jobLog.setTimes(times);
             // 任务状态 0：成功 1：失败
-            jobLog.setStatus("1");
+            jobLog.setStatus(JobLog.JOB_FAIL);
             jobLog.setError(StringUtils.substring(e.toString(), 0, 2000));
         } finally {
             scheduleJobLogService.saveJobLog(jobLog);

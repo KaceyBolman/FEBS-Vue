@@ -9,6 +9,7 @@ import cc.mrbird.febs.system.domain.User;
 import cc.mrbird.febs.system.domain.UserConfig;
 import cc.mrbird.febs.system.service.UserConfigService;
 import cc.mrbird.febs.system.service.UserService;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.wuwenze.poi.ExcelKit;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -83,7 +84,7 @@ public class UserController extends BaseController {
     @RequiresPermissions("user:delete")
     public void deleteUsers(@NotBlank(message = "{required}") @PathVariable String userIds) throws FebsException {
         try {
-            String[] ids = userIds.split(",");
+            String[] ids = userIds.split(StringPool.COMMA);
             this.userService.deleteUsers(ids);
         } catch (Exception e) {
             message = "删除用户失败";
@@ -156,7 +157,7 @@ public class UserController extends BaseController {
     @RequiresPermissions("user:reset")
     public void resetPassword(@NotBlank(message = "{required}") String usernames) throws FebsException {
         try {
-            String[] usernameArr = usernames.split(",");
+            String[] usernameArr = usernames.split(StringPool.COMMA);
             this.userService.resetPassword(usernameArr);
         } catch (Exception e) {
             message = "重置用户密码失败";

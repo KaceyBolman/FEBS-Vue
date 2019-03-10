@@ -19,7 +19,6 @@ import java.util.*;
  * @author MrBird
  */
 @Service("redisService")
-@SuppressWarnings("unchecked")
 public class RedisServiceImpl implements RedisService {
 
     @Autowired

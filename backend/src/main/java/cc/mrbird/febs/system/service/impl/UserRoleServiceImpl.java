@@ -3,6 +3,7 @@ package cc.mrbird.febs.system.service.impl;
 import cc.mrbird.febs.system.dao.UserRoleMapper;
 import cc.mrbird.febs.system.domain.UserRole;
 import cc.mrbird.febs.system.service.UserRoleService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -20,26 +21,19 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
 	@Override
 	@Transactional
 	public void deleteUserRolesByRoleId(String[] roleIds) {
-		List<String> list = Arrays.asList(roleIds);
-		for(String id : list){
-			baseMapper.deleteByRoleId(Long.valueOf(id));
-		}
+		Arrays.stream(roleIds).forEach(id -> baseMapper.deleteByRoleId(Long.valueOf(id)));
 	}
 
 	@Override
 	@Transactional
 	public void deleteUserRolesByUserId(String[] userIds) {
-		List<String> list = Arrays.asList(userIds);
-		for(String id : list){
-			baseMapper.deleteByUserId(Long.valueOf(id));
-		}
+		Arrays.stream(userIds).forEach(id -> baseMapper.deleteByUserId(Long.valueOf(id)));
 	}
 
 	@Override
 	public List<String> findUserIdsByRoleId(String[] roleIds) {
 
-		List<UserRole> list = baseMapper.selectList(new QueryWrapper<UserRole>().lambda().in(UserRole::getRoleId, roleIds));
-
+		List<UserRole> list = baseMapper.selectList(new LambdaQueryWrapper<UserRole>().in(UserRole::getRoleId, (Object) roleIds));
 		return list.stream().map(userRole -> String.valueOf(userRole.getUserId())).collect(Collectors.toList());
 	}
 

@@ -5,7 +5,7 @@ import cc.mrbird.febs.common.utils.AddressUtil;
 import cc.mrbird.febs.system.dao.LogMapper;
 import cc.mrbird.febs.system.domain.SysLog;
 import cc.mrbird.febs.system.service.LogService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.lionsoul.ip2region.DbSearcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.stereotype.Service;
@@ -35,26 +36,27 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, SysLog> implements Lo
     ObjectMapper objectMapper;
 
     @Override
-    public IPage findLogs(Page page, SysLog sysLog) {
+    @SuppressWarnings("unchecked")
+    public IPage<SysLog> findLogs(Page<SysLog> page, SysLog sysLog) {
         try {
-            QueryWrapper<SysLog> queryWrapper = new QueryWrapper<>();
+            LambdaQueryWrapper<SysLog> queryWrapper = new LambdaQueryWrapper<>();
 
             if (StringUtils.isNotBlank(sysLog.getUsername())) {
-                queryWrapper.lambda().eq(SysLog::getUsername, sysLog.getUsername().toLowerCase());
+                queryWrapper.eq(SysLog::getUsername, sysLog.getUsername().toLowerCase());
             }
             if (StringUtils.isNotBlank(sysLog.getOperation())) {
-                queryWrapper.lambda().like(SysLog::getOperation, sysLog.getOperation());
+                queryWrapper.like(SysLog::getOperation, sysLog.getOperation());
             }
             if (StringUtils.isNotBlank(sysLog.getLocation())) {
-                queryWrapper.lambda().like(SysLog::getLocation, sysLog.getLocation());
+                queryWrapper.like(SysLog::getLocation, sysLog.getLocation());
             }
             if (StringUtils.isNotBlank(sysLog.getCreateTimeFrom()) && StringUtils.isNotBlank(sysLog.getCreateTimeTo())) {
-                queryWrapper.lambda()
+                queryWrapper
                         .ge(SysLog::getCreateTime, sysLog.getCreateTimeFrom())
                         .le(SysLog::getCreateTime, sysLog.getCreateTimeTo());
             }
 
-            queryWrapper.lambda().orderByDesc(SysLog::getCreateTime);
+            queryWrapper.orderByDesc(SysLog::getCreateTime);
 
             return this.page(page, queryWrapper);
         } catch (Exception e) {
@@ -97,18 +99,17 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, SysLog> implements Lo
             log.setParams(params.toString());
         }
         log.setCreateTime(new Date());
-        log.setLocation(AddressUtil.getCityInfo(log.getIp()));
+        log.setLocation(AddressUtil.getCityInfo(DbSearcher.BTREE_ALGORITHM, log.getIp()));
         // 保存系统日志
         save(log);
     }
 
-    @SuppressWarnings("unchecked")
     private StringBuilder handleParams(StringBuilder params, Object[] args, List paramNames) throws JsonProcessingException {
         for (int i = 0; i < args.length; i++) {
             if (args[i] instanceof Map) {
                 Set set = ((Map) args[i]).keySet();
-                List list = new ArrayList();
-                List paramList = new ArrayList<>();
+                List<Object> list = new ArrayList<>();
+                List<Object> paramList = new ArrayList<>();
                 for (Object key : set) {
                     list.add(((Map) args[i]).get(key));
                     paramList.add(key);
