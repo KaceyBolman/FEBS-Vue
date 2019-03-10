@@ -5,7 +5,7 @@ import cc.mrbird.febs.job.dao.JobMapper;
 import cc.mrbird.febs.job.domain.Job;
 import cc.mrbird.febs.job.service.JobService;
 import cc.mrbird.febs.job.util.ScheduleUtils;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -56,33 +56,32 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public IPage<Job> findJobs(QueryRequest request, Job job) {
         try {
-            QueryWrapper<Job> queryWrapper = new QueryWrapper<>();
+            LambdaQueryWrapper<Job> queryWrapper = new LambdaQueryWrapper<>();
 
             if (StringUtils.isNotBlank(job.getBeanName())) {
-                queryWrapper.lambda().eq(Job::getBeanName, job.getBeanName());
+                queryWrapper.eq(Job::getBeanName, job.getBeanName());
             }
             if (StringUtils.isNotBlank(job.getMethodName())) {
-                queryWrapper.lambda().eq(Job::getMethodName, job.getMethodName());
+                queryWrapper.eq(Job::getMethodName, job.getMethodName());
             }
             if (StringUtils.isNotBlank(job.getParams())) {
-                queryWrapper.lambda().like(Job::getParams, job.getParams());
+                queryWrapper.like(Job::getParams, job.getParams());
             }
             if (StringUtils.isNotBlank(job.getRemark())) {
-                queryWrapper.lambda().like(Job::getRemark, job.getRemark());
+                queryWrapper.like(Job::getRemark, job.getRemark());
             }
             if (StringUtils.isNotBlank(job.getStatus())) {
-                queryWrapper.lambda().eq(Job::getStatus, job.getStatus());
+                queryWrapper.eq(Job::getStatus, job.getStatus());
             }
 
             if (StringUtils.isNotBlank(job.getCreateTimeFrom()) && StringUtils.isNotBlank(job.getCreateTimeTo())) {
-                queryWrapper.lambda()
+                queryWrapper
                         .ge(Job::getCreateTime, job.getCreateTimeFrom())
                         .le(Job::getCreateTime, job.getCreateTimeTo());
             }
-            queryWrapper.lambda().orderByAsc(Job::getCreateTime);
+            queryWrapper.orderByAsc(Job::getCreateTime);
             Page<Job> page = new Page<>(request.getPageNum(), request.getPageSize());
             return this.page(page, queryWrapper);
         } catch (Exception e) {
@@ -122,7 +121,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
         Job job = new Job();
         job.setStatus(status);
 
-        return this.baseMapper.update(job, new QueryWrapper<Job>().lambda().in(Job::getJobId, list));
+        return this.baseMapper.update(job, new LambdaQueryWrapper<Job>().in(Job::getJobId, list));
     }
 
     @Override
