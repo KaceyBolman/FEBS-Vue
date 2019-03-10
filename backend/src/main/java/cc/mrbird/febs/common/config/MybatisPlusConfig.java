@@ -1,13 +1,12 @@
 package cc.mrbird.febs.common.config;
 
+import cc.mrbird.febs.common.interceptor.SqlStatementInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * @author liuliuzx
- */
 @Configuration
 @MapperScan(value = {"cc.mrbird.febs.*.dao"})
 public class MybatisPlusConfig {
@@ -21,12 +20,15 @@ public class MybatisPlusConfig {
     }
 
     /**
-     * mybatis-plus SQL执行效率插件【生产环境可以关闭】
+     * 配置 sql打印拦截器
+     * application.yml中 febs.showsql: true 时生效
+     *
+     * @return SqlStatementInterceptor
      */
-    // @Bean
-    // public PerformanceInterceptor performanceInterceptor() {
-    //     return new PerformanceInterceptor();
-    // }
-
+    @Bean
+    @ConditionalOnProperty(name = "febs.showsql", havingValue = "true")
+    SqlStatementInterceptor sqlStatementInterceptor() {
+        return new SqlStatementInterceptor();
+    }
 
 }
