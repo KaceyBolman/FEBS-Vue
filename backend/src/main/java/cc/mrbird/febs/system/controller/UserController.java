@@ -48,8 +48,8 @@ public class UserController extends BaseController {
 
     @GetMapping
     @RequiresPermissions("user:view")
-    public Map<String, Object> userList(QueryRequest request, User user) {
-        return super.selectByPageNumSize(request, () -> this.userService.findUserDetail(user, request));
+    public Map<String, Object> userList(QueryRequest queryRequest, User user) {
+        return getDataTable(userService.findUserDetail(user, queryRequest));
     }
 
     @Log("新增用户")
@@ -167,9 +167,9 @@ public class UserController extends BaseController {
 
     @PostMapping("excel")
     @RequiresPermissions("user:export")
-    public void export(User user, QueryRequest request, HttpServletResponse response) throws FebsException {
+    public void export(QueryRequest queryRequest, User user, HttpServletResponse response) throws FebsException {
         try {
-            List<User> users = this.userService.findUserDetail(user, request);
+            List<User> users = this.userService.findUserDetail(user, queryRequest).getRecords();
             ExcelKit.$Export(User.class, response).downXlsx(users, false);
         } catch (Exception e) {
             message = "导出Excel失败";

@@ -1,6 +1,5 @@
 package cc.mrbird.febs.web.controller;
 
-import cc.mrbird.febs.common.controller.BaseController;
 import cc.mrbird.febs.common.domain.FebsConstant;
 import cc.mrbird.febs.common.domain.FebsResponse;
 import cc.mrbird.febs.common.exception.FebsException;
@@ -17,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 @Validated
 @RestController
 @RequestMapping("movie")
-public class MovieController extends BaseController {
+public class MovieController {
 
     private String message;
 

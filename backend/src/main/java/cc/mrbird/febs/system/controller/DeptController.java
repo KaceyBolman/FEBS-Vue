@@ -1,6 +1,7 @@
 package cc.mrbird.febs.system.controller;
 
 import cc.mrbird.febs.common.annotation.Log;
+import cc.mrbird.febs.common.controller.BaseController;
 import cc.mrbird.febs.common.domain.QueryRequest;
 import cc.mrbird.febs.common.exception.FebsException;
 import cc.mrbird.febs.system.domain.Dept;
@@ -22,7 +23,7 @@ import java.util.Map;
 @Validated
 @RestController
 @RequestMapping("dept")
-public class DeptController {
+public class DeptController extends BaseController {
 
     private String message;
 

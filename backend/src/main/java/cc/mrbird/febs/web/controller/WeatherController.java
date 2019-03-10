@@ -1,6 +1,5 @@
 package cc.mrbird.febs.web.controller;
 
-import cc.mrbird.febs.common.controller.BaseController;
 import cc.mrbird.febs.common.domain.FebsConstant;
 import cc.mrbird.febs.common.domain.FebsResponse;
 import cc.mrbird.febs.common.exception.FebsException;
@@ -18,7 +17,7 @@ import javax.validation.constraints.NotBlank;
 @Validated
 @RestController
 @RequestMapping("weather")
-public class WeatherController extends BaseController {
+public class WeatherController {
 
     @GetMapping
     @RequiresPermissions("weather:view")

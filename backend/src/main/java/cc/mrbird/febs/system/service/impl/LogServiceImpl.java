@@ -1,12 +1,14 @@
 package cc.mrbird.febs.system.service.impl;
 
 import cc.mrbird.febs.common.annotation.Log;
-import cc.mrbird.febs.common.domain.QueryRequest;
-import cc.mrbird.febs.common.service.impl.BaseService;
 import cc.mrbird.febs.common.utils.AddressUtil;
-import cc.mrbird.febs.common.utils.FebsUtil;
+import cc.mrbird.febs.system.dao.LogMapper;
 import cc.mrbird.febs.system.domain.SysLog;
 import cc.mrbird.febs.system.service.LogService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import tk.mybatis.mapper.entity.Example;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -28,34 +29,37 @@ import java.util.*;
 @Slf4j
 @Service("logService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class LogServiceImpl extends BaseService<SysLog> implements LogService {
+public class LogServiceImpl extends ServiceImpl<LogMapper, SysLog> implements LogService {
 
     @Autowired
     ObjectMapper objectMapper;
 
     @Override
-    public List<SysLog> findLogs(QueryRequest request, SysLog sysLog) {
+    public IPage findLogs(Page page, SysLog sysLog) {
         try {
-            Example example = new Example(SysLog.class);
-            Example.Criteria criteria = example.createCriteria();
+            QueryWrapper<SysLog> queryWrapper = new QueryWrapper<>();
+
             if (StringUtils.isNotBlank(sysLog.getUsername())) {
-                criteria.andCondition("username=", sysLog.getUsername().toLowerCase());
+                queryWrapper.lambda().eq(SysLog::getUsername, sysLog.getUsername().toLowerCase());
             }
             if (StringUtils.isNotBlank(sysLog.getOperation())) {
-                criteria.andCondition("operation like", "%" + sysLog.getOperation() + "%");
+                queryWrapper.lambda().like(SysLog::getOperation, sysLog.getOperation());
             }
             if (StringUtils.isNotBlank(sysLog.getLocation())) {
-                criteria.andCondition("location like", "%" + sysLog.getLocation() + "%");
+                queryWrapper.lambda().like(SysLog::getLocation, sysLog.getLocation());
             }
             if (StringUtils.isNotBlank(sysLog.getCreateTimeFrom()) && StringUtils.isNotBlank(sysLog.getCreateTimeTo())) {
-                criteria.andCondition("date_format(CREATE_TIME,'%Y-%m-%d') >=", sysLog.getCreateTimeFrom());
-                criteria.andCondition("date_format(CREATE_TIME,'%Y-%m-%d') <=", sysLog.getCreateTimeTo());
+                queryWrapper.lambda()
+                        .ge(SysLog::getCreateTime, sysLog.getCreateTimeFrom())
+                        .le(SysLog::getCreateTime, sysLog.getCreateTimeTo());
             }
-            FebsUtil.handleSort(request, example, "create_time desc");
-            return this.selectByExample(example);
+
+            queryWrapper.lambda().orderByDesc(SysLog::getCreateTime);
+
+            return this.page(page, queryWrapper);
         } catch (Exception e) {
             log.error("获取系统日志失败", e);
-            return new ArrayList<>();
+            return null;
         }
     }
 
@@ -63,7 +67,7 @@ public class LogServiceImpl extends BaseService<SysLog> implements LogService {
     @Transactional
     public void deleteLogs(String[] logIds) {
         List<String> list = Arrays.asList(logIds);
-        this.batchDelete(list, "id", SysLog.class);
+        baseMapper.deleteBatchIds(list);
     }
 
     @Override

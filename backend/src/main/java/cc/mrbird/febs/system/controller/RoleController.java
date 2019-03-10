@@ -37,8 +37,8 @@ public class RoleController extends BaseController {
 
     @GetMapping
     @RequiresPermissions("role:view")
-    public Map<String, Object> roleList(QueryRequest request, Role role) {
-        return super.selectByPageNumSize(request, () -> this.roleService.findRoles(role, request));
+    public Map<String, Object> roleList(QueryRequest queryRequest, Role role) {
+        return getDataTable(roleService.findRoles(role, queryRequest));
     }
 
     @GetMapping("check/{roleName}")
@@ -95,9 +95,9 @@ public class RoleController extends BaseController {
 
     @PostMapping("excel")
     @RequiresPermissions("role:export")
-    public void export(Role role, QueryRequest request, HttpServletResponse response) throws FebsException {
+    public void export(QueryRequest queryRequest, Role role, HttpServletResponse response) throws FebsException {
         try {
-            List<Role> roles = this.roleService.findRoles(role, request);
+            List<Role> roles = this.roleService.findRoles(role, queryRequest).getRecords();
             ExcelKit.$Export(Role.class, response).downXlsx(roles, false);
         } catch (Exception e) {
             message = "导出Excel失败";

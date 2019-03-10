@@ -6,6 +6,7 @@ import cc.mrbird.febs.common.domain.QueryRequest;
 import cc.mrbird.febs.common.exception.FebsException;
 import cc.mrbird.febs.system.domain.Test;
 import cc.mrbird.febs.system.service.TestService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.wuwenze.poi.ExcelKit;
@@ -36,7 +37,8 @@ public class TestController extends BaseController {
 
     @GetMapping
     public Map<String, Object> findTests(QueryRequest request) {
-        return super.selectByPageNumSize(request, () -> this.testService.findTests());
+        Page page = new Page(request.getPageNum(), request.getPageSize());
+        return getDataTable(testService.page(page, null));
     }
 
     /**
