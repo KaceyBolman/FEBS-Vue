@@ -38,22 +38,29 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        <!-- jdbc -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.tomcat</groupId>
-                    <artifactId>tomcat-jdbc</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <!-- 动态数据源 -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
             <version>2.5.1</version>
+        </dependency>
+        <!-- mybatis-plus -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus.version}</version>
+        </dependency>
+        <!-- 代码生成器 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>${mybatis-plus.version}</version>
+        </dependency>
+        <!-- freemaker引擎 -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.28</version>
         </dependency>
         <!-- commons -->
         <dependency>
@@ -74,12 +81,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <!-- mybatis-plus -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${mybatis-plus.version}</version>
         </dependency>
         <!-- shiro-spring -->
         <dependency>
@@ -147,39 +148,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <!--
-           <plugin>
-               <groupId>org.mybatis.generator</groupId>
-               <artifactId>mybatis-generator-maven-plugin</artifactId>
-               <version>1.3.5</version>
-               <dependencies>
-                   <dependency>
-                       <groupId>mysql</groupId>
-                       <artifactId>mysql-connector-java</artifactId>
-                       <version>${mysql.version}</version>
-                   </dependency>
-                   <dependency>
-                       <groupId>tk.mybatis</groupId>
-                       <artifactId>mapper</artifactId>
-                       <version>3.4.0</version>
-                   </dependency>
-               </dependencies>
-               <executions>
-                   <execution>
-                       <id>Generate MyBatis Artifacts</id>
-                       <phase>package</phase>
-                       <goals>
-                           <goal>generate</goal>
-                       </goals>
-                   </execution>
-               </executions>
-               <configuration>
-                   <verbose>true</verbose>
-                   <overwrite>true</overwrite>
-                   <configurationFile>src/main/resources/config/mybatis-generator.xml</configurationFile>
-               </configuration>
-           </plugin>
-           -->
         </plugins>
         <resources>
             <resource>
