@@ -143,10 +143,11 @@ export default {
     padding-bottom: 3rem !important;
   }
   .page-tabs .ant-tabs-close-x {
+    color:#fff !important;
     margin-left: 0.3rem! important;
-    &:hover {
-      color: #f95476 !important;
-    }
+  }
+  .page-tabs:hover .ant-tabs-close-x {
+    color: #f95476 !important;
   }
   .drawer-bootom-button {
     position: absolute;
