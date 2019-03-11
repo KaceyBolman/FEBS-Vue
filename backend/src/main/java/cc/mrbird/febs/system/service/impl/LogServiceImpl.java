@@ -1,11 +1,14 @@
 package cc.mrbird.febs.system.service.impl;
 
 import cc.mrbird.febs.common.annotation.Log;
+import cc.mrbird.febs.common.domain.FebsConstant;
+import cc.mrbird.febs.common.domain.QueryRequest;
 import cc.mrbird.febs.common.utils.AddressUtil;
+import cc.mrbird.febs.common.utils.SortUtil;
 import cc.mrbird.febs.system.dao.LogMapper;
 import cc.mrbird.febs.system.domain.SysLog;
 import cc.mrbird.febs.system.service.LogService;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -36,27 +39,27 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, SysLog> implements Lo
     ObjectMapper objectMapper;
 
     @Override
-    @SuppressWarnings("unchecked")
-    public IPage<SysLog> findLogs(Page<SysLog> page, SysLog sysLog) {
+    public IPage<SysLog> findLogs(QueryRequest request, SysLog sysLog) {
         try {
-            LambdaQueryWrapper<SysLog> queryWrapper = new LambdaQueryWrapper<>();
+            QueryWrapper<SysLog> queryWrapper = new QueryWrapper<>();
 
             if (StringUtils.isNotBlank(sysLog.getUsername())) {
-                queryWrapper.eq(SysLog::getUsername, sysLog.getUsername().toLowerCase());
+                queryWrapper.lambda().eq(SysLog::getUsername, sysLog.getUsername().toLowerCase());
             }
             if (StringUtils.isNotBlank(sysLog.getOperation())) {
-                queryWrapper.like(SysLog::getOperation, sysLog.getOperation());
+                queryWrapper.lambda().like(SysLog::getOperation, sysLog.getOperation());
             }
             if (StringUtils.isNotBlank(sysLog.getLocation())) {
-                queryWrapper.like(SysLog::getLocation, sysLog.getLocation());
+                queryWrapper.lambda().like(SysLog::getLocation, sysLog.getLocation());
             }
             if (StringUtils.isNotBlank(sysLog.getCreateTimeFrom()) && StringUtils.isNotBlank(sysLog.getCreateTimeTo())) {
-                queryWrapper
+                queryWrapper.lambda()
                         .ge(SysLog::getCreateTime, sysLog.getCreateTimeFrom())
                         .le(SysLog::getCreateTime, sysLog.getCreateTimeTo());
             }
 
-            queryWrapper.orderByDesc(SysLog::getCreateTime);
+            Page<SysLog> page = new Page<>(request.getPageNum(), request.getPageSize());
+            SortUtil.handlePageSort(request, page, "createTime", FebsConstant.ORDER_DESC, true);
 
             return this.page(page, queryWrapper);
         } catch (Exception e) {

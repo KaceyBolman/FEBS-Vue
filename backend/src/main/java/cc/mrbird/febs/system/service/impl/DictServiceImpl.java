@@ -1,7 +1,7 @@
 package cc.mrbird.febs.system.service.impl;
 
 import cc.mrbird.febs.common.domain.QueryRequest;
-import cc.mrbird.febs.common.utils.FebsUtil;
+import cc.mrbird.febs.common.utils.SortUtil;
 import cc.mrbird.febs.system.dao.DictMapper;
 import cc.mrbird.febs.system.domain.Dict;
 import cc.mrbird.febs.system.service.DictService;
@@ -42,7 +42,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             }
 
             Page<Dict> page = new Page<>();
-            FebsUtil.handleSort(request, page, null);
+            SortUtil.handlePageSort(request, page, true);
             return this.page(page, queryWrapper);
         } catch (Exception e) {
             log.error("获取字典信息失败", e);

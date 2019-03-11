@@ -6,11 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
 public interface UserMapper extends BaseMapper<User> {
 
-	IPage<User> findUserDetail(Page page, @Param("query") User user);
-
-	List<User> findUserDetail(@Param("query") User user);
+	IPage<User> findUserDetail(Page page, @Param("user") User user);
 }

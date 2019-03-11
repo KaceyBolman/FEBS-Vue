@@ -67,7 +67,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
 
     @Override
-    @SuppressWarnings("unchecked")
     public List<Menu> findMenuList(Menu menu) {
         LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
         findMenuCondition(queryWrapper, menu);

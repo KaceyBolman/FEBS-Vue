@@ -1,6 +1,8 @@
 package cc.mrbird.febs.job.service.impl;
 
+import cc.mrbird.febs.common.domain.FebsConstant;
 import cc.mrbird.febs.common.domain.QueryRequest;
+import cc.mrbird.febs.common.utils.SortUtil;
 import cc.mrbird.febs.job.dao.JobMapper;
 import cc.mrbird.febs.job.domain.Job;
 import cc.mrbird.febs.job.service.JobService;
@@ -81,8 +83,8 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
                         .ge(Job::getCreateTime, job.getCreateTimeFrom())
                         .le(Job::getCreateTime, job.getCreateTimeTo());
             }
-            queryWrapper.orderByAsc(Job::getCreateTime);
             Page<Job> page = new Page<>(request.getPageNum(), request.getPageSize());
+            SortUtil.handlePageSort(request, page, "createTime", FebsConstant.ORDER_DESC, true);
             return this.page(page, queryWrapper);
         } catch (Exception e) {
             log.error("获取任务失败", e);
@@ -120,7 +122,6 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
         List<String> list = Arrays.asList(jobIds.split(StringPool.COMMA));
         Job job = new Job();
         job.setStatus(status);
-
         return this.baseMapper.update(job, new LambdaQueryWrapper<Job>().in(Job::getJobId, list));
     }
 

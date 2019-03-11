@@ -40,23 +40,23 @@
         LEFT JOIN t_user_role ur ON (u.user_id = ur.user_id)
         LEFT JOIN t_role r ON r.role_id = ur.role_id
         WHERE 1 = 1
-        <if test="query.username != null and query.username != ''">
-            AND u.username = #{query.username}
+        <if test="user.username != null and user.username != ''">
+            AND u.username = #{user.username}
         </if>
-        <if test="query.deptId != null and query.deptId != ''">
-            AND d.dept_id = #{query.deptId}
+        <if test="user.deptId != null and user.deptId != ''">
+            AND d.dept_id = #{user.deptId}
         </if>
-        <if test="query.createTimeFrom != null and query.createTimeFrom !=''">
-            And u.create_time &gt; #{query.createTimeFrom}
+        <if test="user.createTimeFrom != null and user.createTimeFrom !=''">
+            And u.create_time &gt; #{user.createTimeFrom}
         </if>
-        <if test="query.createTimeTo!= null and query.createTimeTo !=''">
-            And u.create_time &lt; #{query.createTimeTo}
+        <if test="user.createTimeTo!= null and user.createTimeTo !=''">
+            And u.create_time &lt; #{user.createTimeTo}
         </if>
-        <if test="query.ssex != null and query.ssex != ''">
-            AND u.ssex = #{query.ssex}
+        <if test="user.ssex != null and user.ssex != ''">
+            AND u.ssex = #{user.ssex}
         </if>
-        <if test="query.status != null and query.status != ''">
-            AND u.status = #{query.status}
+        <if test="user.status != null and user.status != ''">
+            AND u.status = #{user.status}
         </if>
         group by u.username
 
