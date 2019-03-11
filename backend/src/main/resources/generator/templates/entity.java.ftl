@@ -41,7 +41,7 @@ public class ${entity} extends Model<${entity}> {
 public class ${entity} implements Serializable {
 </#if>
 
-private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 <#-- ----------  BEGIN 字段循环遍历  ---------->
 <#list table.fields as field>
     <#if field.keyFlag>
@@ -50,11 +50,11 @@ private static final long serialVersionUID = 1L;
 
     <#if field.comment!?length gt 0>
         <#if swagger2>
-            @ApiModelProperty(value = "${field.comment}")
+    @ApiModelProperty(value = "${field.comment}")
         <#else>
-            /**
-            * ${field.comment}
-            */
+    /**
+     * ${field.comment}
+     */
         </#if>
     </#if>
     <#if field.keyFlag>
