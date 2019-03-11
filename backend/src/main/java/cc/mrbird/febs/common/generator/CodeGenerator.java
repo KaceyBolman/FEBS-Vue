@@ -57,7 +57,7 @@ public class CodeGenerator {
         String projectPath = System.getProperty("user.dir");
         globalConfig.setOutputDir(projectPath + "/src/main/java");
         globalConfig.setAuthor(AUTHOR);
-        globalConfig.setOpen(true);
+        globalConfig.setOpen(false);
         globalConfig.setFileOverride(false);
         generator.setGlobalConfig(globalConfig);
 
