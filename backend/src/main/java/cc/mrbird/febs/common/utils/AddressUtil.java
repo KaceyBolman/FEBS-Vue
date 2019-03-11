@@ -50,7 +50,7 @@ public class AddressUtil {
             DataBlock dataBlock = (DataBlock) method.invoke(searcher, ip);
             return dataBlock.getRegion();
         } catch (Exception e) {
-            log.error("获取地址信息异常：{}", e);
+            log.error("获取地址信息异常：{}", e.getMessage());
         }
         return "";
     }
