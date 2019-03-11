@@ -44,11 +44,10 @@ public class AddressUtil {
                     method = searcher.getClass().getMethod("memorySearch", String.class);
                     break;
             }
-            DataBlock dataBlock;
             if (!Util.isIpAddress(ip)) {
                 log.error("Error: Invalid ip address");
             }
-            dataBlock = (DataBlock) method.invoke(searcher, ip);
+            DataBlock dataBlock = (DataBlock) method.invoke(searcher, ip);
             return dataBlock.getRegion();
         } catch (Exception e) {
             log.error("获取地址信息异常：{}", e);

@@ -1,6 +1,8 @@
 package cc.mrbird.febs.job.service.impl;
 
+import cc.mrbird.febs.common.domain.FebsConstant;
 import cc.mrbird.febs.common.domain.QueryRequest;
+import cc.mrbird.febs.common.utils.SortUtil;
 import cc.mrbird.febs.job.dao.JobLogMapper;
 import cc.mrbird.febs.job.domain.JobLog;
 import cc.mrbird.febs.job.service.JobLogService;
@@ -23,7 +25,6 @@ import java.util.List;
 public class JobLogServiceImpl extends ServiceImpl<JobLogMapper, JobLog> implements JobLogService {
 
     @Override
-    @SuppressWarnings("unchecked")
     public IPage<JobLog> findJobLogs(QueryRequest request, JobLog jobLog) {
         try {
             LambdaQueryWrapper<JobLog> queryWrapper = new LambdaQueryWrapper<>();
@@ -45,8 +46,8 @@ public class JobLogServiceImpl extends ServiceImpl<JobLogMapper, JobLog> impleme
                         .ge(JobLog::getCreateTime, jobLog.getCreateTimeFrom())
                         .le(JobLog::getCreateTime, jobLog.getCreateTimeTo());
             }
-            queryWrapper.orderByAsc(JobLog::getCreateTime);
             Page<JobLog> page = new Page<>(request.getPageNum(), request.getPageSize());
+            SortUtil.handlePageSort(request, page, "createTime", FebsConstant.ORDER_DESC, true);
             return this.page(page, queryWrapper);
 
         } catch (Exception e) {

@@ -2,9 +2,9 @@ package cc.mrbird.febs.common.runner;
 
 import cc.mrbird.febs.common.exception.RedisConnectException;
 import cc.mrbird.febs.common.service.CacheService;
-import cc.mrbird.febs.system.dao.UserMapper;
 import cc.mrbird.febs.system.domain.User;
 import cc.mrbird.febs.system.manager.UserManager;
+import cc.mrbird.febs.system.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -22,7 +22,7 @@ import java.util.List;
 public class CacheInitRunner implements ApplicationRunner {
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @Autowired
     private CacheService cacheService;
@@ -40,7 +40,7 @@ public class CacheInitRunner implements ApplicationRunner {
 
             log.info("缓存初始化 ······");
             log.info("缓存用户数据 ······");
-            List<User> list = this.userMapper.findUserDetail(new User());
+            List<User> list = this.userService.list();
             for (User user : list) {
                 userManager.loadUserRedisCache(user);
             }
