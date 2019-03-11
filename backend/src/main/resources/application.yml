@@ -4,6 +4,8 @@ server:
 spring:
   datasource:
     dynamic:
+      # 是否开启 SQL日志输出，生产环境建议关闭，有性能损耗
+      p6spy: true
       hikari:
         connection-timeout: 30000
         max-lifetime: 1800000
@@ -67,8 +69,6 @@ management:
 
 
 febs:
-  # 是否开启 SQL日志输出，生产环境建议关闭，有性能损耗
-  showSql: false
   # 是否异步记录用户操作日志
   openAopLog: true
   # 单次最大批量入库数量
