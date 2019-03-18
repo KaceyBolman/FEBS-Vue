@@ -18,7 +18,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-@ToString
 @TableName("t_user")
 @Excel("用户信息表")
 public class User implements Serializable {
