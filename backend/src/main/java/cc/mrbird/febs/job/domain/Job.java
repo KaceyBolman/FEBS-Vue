@@ -16,7 +16,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-@ToString
 @TableName("t_job")
 @Excel("定时任务信息表")
 public class Job implements Serializable {
