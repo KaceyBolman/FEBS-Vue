@@ -7,7 +7,6 @@ import lombok.ToString;
 import java.util.Date;
 
 @TableName("t_login_log")
-@ToString
 @Data
 public class LoginLog {
     /**

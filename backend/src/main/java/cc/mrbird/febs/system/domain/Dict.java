@@ -13,7 +13,6 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Data
-@ToString
 @TableName("t_dict")
 @Excel("字典信息表")
 public class Dict implements Serializable {

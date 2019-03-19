@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-@ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Tree<T> {
 
