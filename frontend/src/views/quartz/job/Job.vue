@@ -91,7 +91,7 @@
           <a-icon v-hasPermission="'job:update'" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修改"></a-icon>
           &nbsp;
           <a-dropdown v-hasAnyPermission="'job:run','job:pause','job:resume'">
-            <a class="ant-dropdown-link" href="#">
+            <a class="ant-dropdown-link">
               <a-icon type="down-circle" style="font-size: 1.1rem"/>
             </a>
             <a-menu slot="overlay">
