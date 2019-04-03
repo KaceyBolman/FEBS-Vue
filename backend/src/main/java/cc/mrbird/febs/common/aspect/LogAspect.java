@@ -6,7 +6,6 @@ import cc.mrbird.febs.common.utils.HttpContextUtil;
 import cc.mrbird.febs.common.utils.IPUtil;
 import cc.mrbird.febs.system.domain.SysLog;
 import cc.mrbird.febs.system.service.LogService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -41,15 +40,11 @@ public class LogAspect {
     }
 
     @Around("pointcut()")
-    public Object around(ProceedingJoinPoint point) throws JsonProcessingException {
+    public Object around(ProceedingJoinPoint point) throws Throwable {
         Object result = null;
         long beginTime = System.currentTimeMillis();
-        try {
-            // 执行方法
-            result = point.proceed();
-        } catch (Throwable e) {
-            log.error(e.getMessage());
-        }
+        // 执行方法
+        result = point.proceed();
         // 获取 request
         HttpServletRequest request = HttpContextUtil.getHttpServletRequest();
         // 设置 IP 地址
