@@ -23,7 +23,7 @@ const createLintingRule = () => ({
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-    app: './src/main.js'
+    app: ['babel-polyfill', './src/main.js']
   },
   output: {
     path: config.build.assetsRoot,
@@ -96,5 +96,15 @@ module.exports = {
   plugins: [
     // Ignore all locale files of moment.js
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.optimize.UglifyJsPlugin({
+      beautify: false,
+      comments: false,
+      compress: {
+        warnings: false,
+        drop_console: true,
+        collapse_vars: true,
+        reduce_vars: true,
+      }
+    }),
   ]
 }
