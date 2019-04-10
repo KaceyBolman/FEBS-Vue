@@ -7,6 +7,7 @@ import cc.mrbird.febs.common.utils.IPUtil;
 import cc.mrbird.febs.system.domain.SysLog;
 import cc.mrbird.febs.system.service.LogService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -54,7 +55,10 @@ public class LogAspect {
         if (febsProperties.isOpenAopLog()) {
             // 保存日志
             String token = (String) SecurityUtils.getSubject().getPrincipal();
-            String username = JWTUtil.getUsername(token);
+            String username = "";
+            if (StringUtils.isNotBlank(token)) {
+                username = JWTUtil.getUsername(token);
+            }
 
             SysLog log = new SysLog();
             log.setUsername(username);
