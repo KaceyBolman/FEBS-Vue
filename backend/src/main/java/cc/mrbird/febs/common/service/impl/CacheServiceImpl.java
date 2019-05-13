@@ -3,6 +3,7 @@ package cc.mrbird.febs.common.service.impl;
 import cc.mrbird.febs.common.domain.FebsConstant;
 import cc.mrbird.febs.common.service.CacheService;
 import cc.mrbird.febs.common.service.RedisService;
+import cc.mrbird.febs.system.dao.UserMapper;
 import cc.mrbird.febs.system.domain.Menu;
 import cc.mrbird.febs.system.domain.Role;
 import cc.mrbird.febs.system.domain.User;
@@ -36,6 +37,9 @@ public class CacheServiceImpl implements CacheService {
 
     @Autowired
     private UserConfigService userConfigService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Autowired
     private ObjectMapper mapper;
@@ -94,7 +98,7 @@ public class CacheServiceImpl implements CacheService {
 
     @Override
     public void saveUser(String username) throws Exception {
-        User user = userService.findByName(username);
+        User user = userMapper.findDetail(username);
         this.deleteUser(username);
         redisService.set(FebsConstant.USER_CACHE_PREFIX + username, mapper.writeValueAsString(user));
     }
