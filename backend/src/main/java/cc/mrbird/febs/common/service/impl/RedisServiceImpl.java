@@ -24,6 +24,8 @@ public class RedisServiceImpl implements RedisService {
     @Autowired
     JedisPool jedisPool;
 
+    private static String separator = System.getProperty("line.separator");
+
     /**
      * 处理 jedis请求
      *
@@ -48,7 +50,7 @@ public class RedisServiceImpl implements RedisService {
                 }
         );
         List<RedisInfo> infoList = new ArrayList<>();
-        String[] strs = Objects.requireNonNull(info).split("\n");
+        String[] strs = Objects.requireNonNull(info).split(separator);
         RedisInfo redisInfo;
         if (strs.length > 0) {
             for (String str1 : strs) {
@@ -90,7 +92,7 @@ public class RedisServiceImpl implements RedisService {
                     return client.getBulkReply();
                 }
         );
-        String[] strs = Objects.requireNonNull(info).split("\n");
+        String[] strs = Objects.requireNonNull(info).split(separator);
         Map<String, Object> map = null;
         for (String s : strs) {
             String[] detail = s.split(":");
