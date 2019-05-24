@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
+import org.apache.shiro.web.util.WebUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +17,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @Slf4j
 public class JWTFilter extends BasicHttpAuthenticationFilter {
@@ -80,28 +83,20 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
         }
         return super.preHandle(request, response);
     }
-	
-	@Override
+
+    @Override
     protected boolean sendChallenge(ServletRequest request, ServletResponse response) {
         log.debug("Authentication required: sending 401 Authentication challenge response.");
         HttpServletResponse httpResponse = WebUtils.toHttp(response);
         httpResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         httpResponse.setCharacterEncoding("utf-8");
         httpResponse.setContentType("application/json; charset=utf-8");
-        final String message = "未登录或登录已过期，请重新登录。";
-        PrintWriter out = null;
-        try {
-            out = httpResponse.getWriter();
-            String responseJson = "{\"message\":\"" + message +"\"}";
+        final String message = "未认证，请在前端系统进行认证";
+        try (PrintWriter out = httpResponse.getWriter()) {
+            String responseJson = "{\"message\":\"" + message + "\"}";
             out.print(responseJson);
         } catch (IOException e) {
             log.error("sendChallenge error：", e);
-            e.printStackTrace();
-        }finally {
-            if(null != out){
-                out.flush();
-                out.close();
-            }
         }
         return false;
     }
