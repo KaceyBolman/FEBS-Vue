@@ -13,7 +13,7 @@ FEBS-Vue为[FEBS-Shiro](https://github.com/wuyouzhuguli/FEBS-Shiro)的前后端�
 
 ### 预览地址
 
-服务器带宽小，初次加载较慢，请耐心等待：[http://111.230.157.133:8081](http://111.230.157.133:8081)。
+[http://49.234.20.223/#/login](http://49.234.20.223/#/login)。
 
 演示环境账号密码：
 
