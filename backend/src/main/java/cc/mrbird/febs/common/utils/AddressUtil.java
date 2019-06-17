@@ -8,16 +8,15 @@ import org.lionsoul.ip2region.DbSearcher;
 import org.lionsoul.ip2region.Util;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
 @Slf4j
 public class AddressUtil {
 
-    private AddressUtil() {
-    }
-
-    public static String getCityInfo(int algorithm, String ip) {
+    public static String getCityInfo(String ip) {
+        DbSearcher searcher = null;
         try {
             String dbPath = AddressUtil.class.getResource("/ip2region/ip2region.db").getPath();
             File file = new File(dbPath);
@@ -27,30 +26,27 @@ public class AddressUtil {
                 file = new File(dbPath);
                 FileUtils.copyInputStreamToFile(Objects.requireNonNull(AddressUtil.class.getClassLoader().getResourceAsStream("classpath:ip2region/ip2region.db")), file);
             }
+            int algorithm = DbSearcher.BTREE_ALGORITHM;
             DbConfig config = new DbConfig();
-            DbSearcher searcher = new DbSearcher(config, file.getPath());
-            Method method;
-            switch (algorithm) {
-                case DbSearcher.BTREE_ALGORITHM:
-                    method = searcher.getClass().getMethod("btreeSearch", String.class);
-                    break;
-                case DbSearcher.BINARY_ALGORITHM:
-                    method = searcher.getClass().getMethod("binarySearch", String.class);
-                    break;
-                case DbSearcher.MEMORY_ALGORITYM:
-                    method = searcher.getClass().getMethod("memorySearch", String.class);
-                    break;
-                default:
-                    method = searcher.getClass().getMethod("memorySearch", String.class);
-                    break;
-            }
+            searcher = new DbSearcher(config, file.getPath());
+            Method method = null;
+            method = searcher.getClass().getMethod("btreeSearch", String.class);
+            DataBlock dataBlock = null;
             if (!Util.isIpAddress(ip)) {
                 log.error("Error: Invalid ip address");
             }
-            DataBlock dataBlock = (DataBlock) method.invoke(searcher, ip);
+            dataBlock = (DataBlock) method.invoke(searcher, ip);
             return dataBlock.getRegion();
         } catch (Exception e) {
-            log.error("获取地址信息异常：{}", e.getMessage());
+            log.error("获取地址信息异常", e);
+        } finally {
+            if (searcher != null) {
+                try {
+                    searcher.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return "";
     }
