@@ -908,7 +908,7 @@ INSERT INTO `t_user_role` VALUES ('12', '72');
 -- Function structure for findDeptChildren
 -- ----------------------------
 DROP FUNCTION IF EXISTS `findDeptChildren`;
-DELIMITER ;;
+DELIMITER $$
 CREATE DEFINER=`root`@`localhost` FUNCTION `findDeptChildren`(rootId INT) RETURNS varchar(4000) CHARSET utf8
 BEGIN
   DECLARE sTemp VARCHAR(4000);
@@ -922,14 +922,14 @@ BEGIN
 END WHILE;
 RETURN sTemp;
 END
-;;
+$$
 DELIMITER ;
 
 -- ----------------------------
 -- Function structure for findMenuChildren
 -- ----------------------------
 DROP FUNCTION IF EXISTS `findMenuChildren`;
-DELIMITER ;;
+DELIMITER $$
 CREATE DEFINER=`root`@`localhost` FUNCTION `findMenuChildren`(rootId INT) RETURNS varchar(4000) CHARSET utf8
 BEGIN
   DECLARE sTemp VARCHAR(4000);
@@ -943,7 +943,7 @@ BEGIN
 END WHILE;
 RETURN sTemp;
 END
-;;
+$$
 DELIMITER ;
 
 set global sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
