@@ -32,7 +32,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
 	@Override
 	public List<String> findUserIdsByRoleId(String[] roleIds) {
 
-		List<UserRole> list = baseMapper.selectList(new LambdaQueryWrapper<UserRole>().in(UserRole::getRoleId, (Object) roleIds));
+		List<UserRole> list = baseMapper.selectList(new LambdaQueryWrapper<UserRole>().in(UserRole::getRoleId, String.join(",", roleIds)));
 		return list.stream().map(userRole -> String.valueOf(userRole.getUserId())).collect(Collectors.toList());
 	}
 
