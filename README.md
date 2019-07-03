@@ -13,7 +13,7 @@ FEBS-Vue为[FEBS-Shiro](https://github.com/wuyouzhuguli/FEBS-Shiro)的前后端�
 
 ### 预览地址
 
-[http://49.234.20.223/#/login](http://49.234.20.223/#/login)。
+[http://febs.mrbird.cc:8081/#/login](http://febs.mrbird.cc:8081/#/login)。
 
 演示环境账号密码：
 
