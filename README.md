@@ -1,6 +1,5 @@
 ### FEBS-Vue
-![https://img.shields.io/badge/build-success-brightgreen.svg?longCache=true&style=flat-square](https://img.shields.io/badge/build-success-brightgreen.svg?longCache=true&style=flat-square)
-![https://img.shields.io/badge/license-MIT-blue.svg?longCache=true&style=flat-square](https://img.shields.io/badge/license-MIT-blue.svg?longCache=true&style=flat-square)
+![https://img.shields.io/badge/license-Apache%202.0-blue.svg?longCache=true&style=flat-square](https://img.shields.io/badge/license-Apache%202.0-blue.svg?longCache=true&style=flat-square)
 ![https://img.shields.io/badge/springboot-2.1.0-yellow.svg?longCache=true&style=flat-square](https://img.shields.io/badge/springboot-2.1.0-yellow.svg?longCache=true&style=flat-square)
 ![https://img.shields.io/badge/shiro-1.4.0-orange.svg?longCache=true&style=flat-square](https://img.shields.io/badge/shiro-1.4.0-orange.svg?longCache=true&style=flat-square)
 ![https://img.shields.io/badge/vue-2.5.17-brightgreen.svg?longCache=true&style=flat-square](https://img.shields.io/badge/vue-2.5.17-brightgreen.svg?longCache=true&style=flat-square)
