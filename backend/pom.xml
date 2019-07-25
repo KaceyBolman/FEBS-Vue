@@ -161,7 +161,17 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>ip2region/ip2region.db</exclude>
+                </excludes>
                 <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>ip2region/ip2region.db</include>
+                </includes>
+                <filtering>false</filtering>
             </resource>
             <resource>
                 <directory>src/main/java</directory>
