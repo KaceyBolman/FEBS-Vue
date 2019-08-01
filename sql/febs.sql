@@ -904,47 +904,4 @@ INSERT INTO `t_user_role` VALUES ('1', '1');
 INSERT INTO `t_user_role` VALUES ('2', '2');
 INSERT INTO `t_user_role` VALUES ('12', '72');
 
--- ----------------------------
--- Function structure for findDeptChildren
--- ----------------------------
-DROP FUNCTION IF EXISTS `findDeptChildren`;
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `findDeptChildren`(rootId INT) RETURNS varchar(4000) CHARSET utf8
-BEGIN
-  DECLARE sTemp VARCHAR(4000);
-    DECLARE sTempChd VARCHAR(4000);
-    SET sTemp = '$';
-    SET sTempChd = CAST(rootId as CHAR);
-    WHILE sTempChd is not null DO
-    SET sTemp = CONCAT(sTemp,',',sTempChd);
-    SELECT GROUP_CONCAT(dept_id) INTO sTempChd FROM t_dept
-    WHERE FIND_IN_SET(parent_id,sTempChd)>0;
-END WHILE;
-RETURN sTemp;
-END
-$$
-DELIMITER ;
 
--- ----------------------------
--- Function structure for findMenuChildren
--- ----------------------------
-DROP FUNCTION IF EXISTS `findMenuChildren`;
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` FUNCTION `findMenuChildren`(rootId INT) RETURNS varchar(4000) CHARSET utf8
-BEGIN
-  DECLARE sTemp VARCHAR(4000);
-    DECLARE sTempChd VARCHAR(4000);
-    SET sTemp = '$';
-    SET sTempChd = CAST(rootId as CHAR);
-    WHILE sTempChd is not null DO
-    SET sTemp = CONCAT(sTemp,',',sTempChd);
-    SELECT GROUP_CONCAT(menu_id) INTO sTempChd FROM t_menu
-    WHERE FIND_IN_SET(parent_id,sTempChd)>0;
-END WHILE;
-RETURN sTemp;
-END
-$$
-DELIMITER ;
-
-set global sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
-set session sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';
