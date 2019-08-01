@@ -58,7 +58,19 @@
         <if test="user.status != null and user.status != ''">
             AND u.status = #{user.status}
         </if>
-        group by u.username
+        group by u.username,
+            u.user_id,
+            u.password,
+            u.email,
+            u.mobile,
+            u. STATUS,
+            u.create_time,
+            u.ssex,
+            d.dept_id,
+            d.dept_name,
+            u.AVATAR,
+            u.DESCRIPTION,
+            u.LAST_LOGIN_TIME
 
     </select>
 
@@ -85,6 +97,18 @@
         LEFT JOIN t_user_role ur ON (u.user_id = ur.user_id)
         LEFT JOIN t_role r ON r.role_id = ur.role_id
         WHERE  u.username = #{username}
-        group by u.username
+        group by u.username,
+            u.user_id,
+            u.password,
+            u.email,
+            u.mobile,
+            u.STATUS,
+            u.create_time,
+            u.ssex,
+            d.dept_id,
+            d.dept_name,
+            u.AVATAR,
+            u.DESCRIPTION,
+            u.LAST_LOGIN_TIME
     </select>
 </mapper>

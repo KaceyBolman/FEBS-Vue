@@ -3,7 +3,6 @@ package cc.mrbird.febs.system.service.impl;
 import cc.mrbird.febs.common.domain.FebsConstant;
 import cc.mrbird.febs.common.domain.QueryRequest;
 import cc.mrbird.febs.common.domain.Tree;
-import cc.mrbird.febs.common.utils.FebsUtil;
 import cc.mrbird.febs.common.utils.SortUtil;
 import cc.mrbird.febs.common.utils.TreeUtil;
 import cc.mrbird.febs.system.dao.DeptMapper;
@@ -11,6 +10,7 @@ import cc.mrbird.febs.system.domain.Dept;
 import cc.mrbird.febs.system.service.DeptService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -79,7 +79,7 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
     @Override
     @Transactional
     public void deleteDepts(String[] deptIds) {
-        Arrays.stream(deptIds).forEach(deptId -> this.baseMapper.deleteDepts(deptId));
+        this.delete(Arrays.asList(deptIds));
     }
 
     private void buildTrees(List<Tree<Dept>> trees, List<Dept> depts) {
@@ -96,5 +96,18 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
             tree.setValue(tree.getId());
             trees.add(tree);
         });
+    }
+
+    private void delete(List<String> deptIds) {
+        removeByIds(deptIds);
+
+        LambdaQueryWrapper<Dept> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(Dept::getParentId, deptIds);
+        List<Dept> depts = baseMapper.selectList(queryWrapper);
+        if (CollectionUtils.isNotEmpty(depts)) {
+            List<String> deptIdList = new ArrayList<>();
+            depts.forEach(d -> deptIdList.add(String.valueOf(d.getDeptId())));
+            this.delete(deptIdList);
+        }
     }
 }

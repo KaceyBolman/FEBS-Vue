@@ -8,8 +8,10 @@ import cc.mrbird.febs.system.domain.Menu;
 import cc.mrbird.febs.system.manager.UserManager;
 import cc.mrbird.febs.system.service.MenuService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -98,11 +100,10 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Override
     @Transactional
     public void deleteMeuns(String[] menuIds) throws Exception {
+        this.delete(Arrays.asList(menuIds));
         for (String menuId : menuIds) {
             // 查找与这些菜单/按钮关联的用户
             List<String> userIds = this.baseMapper.findUserIdsByMenuId(String.valueOf(menuId));
-            // 递归删除这些菜单/按钮
-            this.baseMapper.deleteMenus(menuId);
             // 重新将这些用户的角色和权限缓存到 Redis中
             this.userManager.loadUserPermissionRoleRedisCache(userIds);
         }
@@ -150,6 +151,20 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             queryWrapper
                     .ge(Menu::getCreateTime, menu.getCreateTimeFrom())
                     .le(Menu::getCreateTime, menu.getCreateTimeTo());
+        }
+    }
+
+
+    private void delete(List<String> menuIds) {
+        removeByIds(menuIds);
+
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(Menu::getParentId, menuIds);
+        List<Menu> menus = baseMapper.selectList(queryWrapper);
+        if (CollectionUtils.isNotEmpty(menus)) {
+            List<String> menuIdList = new ArrayList<>();
+            menus.forEach(m -> menuIdList.add(String.valueOf(m.getMenuId())));
+            this.delete(menuIdList);
         }
     }
 
