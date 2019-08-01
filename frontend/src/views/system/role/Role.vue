@@ -31,9 +31,9 @@
     </div>
     <div>
       <div class="operator">
-        <a-button v-hasPermission="'role:add'" ghost type="primary" @click="add">新增</a-button>
-        <a-button v-hasPermission="'role:delete'" @click="batchDelete">删除</a-button>
-        <a-dropdown v-hasPermission="'role:export'">
+        <a-button v-hasPermission="['role:add']" ghost type="primary" @click="add">新增</a-button>
+        <a-button v-hasPermission="['role:delete']" @click="batchDelete">删除</a-button>
+        <a-dropdown v-hasPermission="['role:export']">
           <a-menu slot="overlay">
             <a-menu-item key="export-data" @click="exprotExccel">导出Excel</a-menu-item>
           </a-menu>
@@ -60,7 +60,7 @@
           </a-popover>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon v-hasPermission="'role:update'" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修改角色"></a-icon>
+          <a-icon v-hasPermission="['role:update']" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修改角色"></a-icon>
           &nbsp;
           <a-icon type="eye" theme="twoTone" twoToneColor="#42b983" @click="view(record)" title="查看"></a-icon>
         </template>

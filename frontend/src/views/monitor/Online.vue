@@ -38,8 +38,8 @@
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon v-hasPermission="'user:kickout'" type="poweroff" style="color: #f95476" @click="kickout(record)" title="踢出"></a-icon>
-          <a-badge v-hasNoPermission="'user:kickout'" status="warning" text="无权限"></a-badge>
+          <a-icon v-hasPermission="['user:kickout']" type="poweroff" style="color: #f95476" @click="kickout(record)" title="踢出"></a-icon>
+          <a-badge v-hasNoPermission="['user:kickout']" status="warning" text="无权限"></a-badge>
         </template>
       </a-table>
     </div>

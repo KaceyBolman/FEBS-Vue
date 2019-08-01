@@ -6,7 +6,7 @@ export const hasPermission = {
     Vue.directive('hasPermission', {
       bind (el, binding, vnode) {
         let permissions = vnode.context.$store.state.account.permissions
-        let value = binding.value.split(',')
+        let value = binding.value
         let flag = true
         for (let v of value) {
           if (!permissions.includes(v)) {
@@ -31,7 +31,7 @@ export const hasNoPermission = {
     Vue.directive('hasNoPermission', {
       bind (el, binding, vnode) {
         let permissions = vnode.context.$store.state.account.permissions
-        let value = binding.value.split(',')
+        let value = binding.value
         let flag = true
         for (let v of value) {
           if (permissions.includes(v)) {
@@ -56,7 +56,7 @@ export const hasAnyPermission = {
     Vue.directive('hasAnyPermission', {
       bind (el, binding, vnode) {
         let permissions = vnode.context.$store.state.account.permissions
-        let value = binding.value.split(',')
+        let value = binding.value
         let flag = false
         for (let v of value) {
           if (permissions.includes(v)) {
@@ -81,7 +81,7 @@ export const hasRole = {
     Vue.directive('hasRole', {
       bind (el, binding, vnode) {
         let permissions = vnode.context.$store.state.account.roles
-        let value = binding.value.split(',')
+        let value = binding.value
         let flag = true
         for (let v of value) {
           if (!permissions.includes(v)) {
@@ -106,7 +106,7 @@ export const hasAnyRole = {
     Vue.directive('hasAnyRole', {
       bind (el, binding, vnode) {
         let permissions = vnode.context.$store.state.account.roles
-        let value = binding.value.split(',')
+        let value = binding.value
         let flag = false
         for (let v of value) {
           if (permissions.includes(v)) {

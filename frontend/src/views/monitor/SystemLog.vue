@@ -50,8 +50,8 @@
       </a-form>
     <div>
       <div class="operator">
-        <a-button v-hasPermission="'log:delete'" @click="batchDelete" type="primary" ghost>删除</a-button>
-        <a-dropdown v-hasPermission="'log:export'">
+        <a-button v-hasPermission="['log:delete']" @click="batchDelete" type="primary" ghost>删除</a-button>
+        <a-dropdown v-hasPermission="['log:export']">
           <a-menu slot="overlay">
             <a-menu-item key="export-data" @click="exprotExccel">导出Excel</a-menu-item>
           </a-menu>

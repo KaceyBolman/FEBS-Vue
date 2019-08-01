@@ -31,9 +31,9 @@
     </div>
     <div>
       <div class="operator">
-        <a-button v-hasPermission="'dept:add'" type="primary" ghost @click="add">新增</a-button>
-        <a-button v-hasPermission="'dept:delete'" @click="batchDelete">删除</a-button>
-        <a-dropdown v-hasPermission="'dept:export'">
+        <a-button v-hasPermission="['dept:add']" type="primary" ghost @click="add">新增</a-button>
+        <a-button v-hasPermission="['dept:delete']" @click="batchDelete">删除</a-button>
+        <a-dropdown v-hasPermission="['dept:export']">
           <a-menu slot="overlay">
             <a-menu-item key="export-data" @click="exportExcel">导出Excel</a-menu-item>
           </a-menu>
@@ -51,8 +51,8 @@
                :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
                @change="handleTableChange">
         <template slot="operation" slot-scope="text, record">
-          <a-icon v-hasPermission="'dept:update'" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修改"></a-icon>
-          <a-badge v-hasNoPermission="'dept:update'" status="warning" text="无权限"></a-badge>
+          <a-icon v-hasPermission="['dept:update']" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修改"></a-icon>
+          <a-badge v-hasNoPermission="['dept:update']" status="warning" text="无权限"></a-badge>
         </template>
       </a-table>
     </div>
