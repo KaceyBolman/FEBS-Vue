@@ -38,10 +38,10 @@
           @cancel="() => createMenu()"
           @confirm="() => createButton()">
           <a-icon slot="icon" type="question-circle-o" style="color: orangered" />
-          <a-button type="primary" v-hasPermission="'menu:add'" ghost>新增</a-button>
+          <a-button type="primary" v-hasPermission="['menu:add']" ghost>新增</a-button>
         </a-popconfirm>
-        <a-button v-hasPermission="'menu:delete'" @click="batchDelete">删除</a-button>
-        <a-dropdown v-hasPermission="'menu:export'">
+        <a-button v-hasPermission="['menu:delete']" @click="batchDelete">删除</a-button>
+        <a-dropdown v-hasPermission="['menu:export']">
           <a-menu slot="overlay">
             <a-menu-item key="export-data" @click="exprotExccel">导出Excel</a-menu-item>
           </a-menu>
@@ -62,8 +62,8 @@
          <a-icon :type="text" />
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon v-hasPermission="'menu:update'" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修改"></a-icon>
-          <a-badge v-hasNoPermission="'menu:update'" status="warning" text="无权限"></a-badge>
+          <a-icon v-hasPermission="['menu:update']" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修改"></a-icon>
+          <a-badge v-hasNoPermission="['menu:update']" status="warning" text="无权限"></a-badge>
         </template>
       </a-table>
     </div>

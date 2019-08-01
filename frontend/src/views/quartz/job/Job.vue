@@ -52,9 +52,9 @@
     </div>
     <div>
       <div class="operator">
-        <a-button v-hasPermission="'job:add'" ghost type="primary" @click="add">新增</a-button>
-        <a-button v-hasPermission="'job:delete'" @click="batchDelete">删除</a-button>
-        <a-dropdown v-hasPermission="'job:export'">
+        <a-button v-hasPermission="['job:add']" ghost type="primary" @click="add">新增</a-button>
+        <a-button v-hasPermission="['job:delete']" @click="batchDelete">删除</a-button>
+        <a-dropdown v-hasPermission="['job:export']">
           <a-menu slot="overlay">
             <a-menu-item key="export-data" @click="exprotExccel">导出Excel</a-menu-item>
           </a-menu>
@@ -90,23 +90,23 @@
         <template slot="operations" slot-scope="text, record">
           <a-icon v-hasPermission="'job:update'" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修改"></a-icon>
           &nbsp;
-          <a-dropdown v-hasAnyPermission="'job:run','job:pause','job:resume'">
+          <a-dropdown v-hasAnyPermission="['job:run','job:pause','job:resume']">
             <a class="ant-dropdown-link">
               <a-icon type="down-circle" style="font-size: 1.1rem"/>
             </a>
             <a-menu slot="overlay">
-              <a-menu-item v-hasPermission="'job:run'">
+              <a-menu-item v-hasPermission="['job:run']">
                 <a href="javascript:void(0)" @click="runJob(record)">立即执行</a>
               </a-menu-item>
-              <a-menu-item v-hasPermission="'job:pause'" v-if="record.status === '0'">
+              <a-menu-item v-hasPermission="['job:pause']" v-if="record.status === '0'">
                 <a href="javascript:void(0)" @click="pauseJob(record)">暂停任务</a>
               </a-menu-item>
-              <a-menu-item v-hasPermission="'job:resume'" v-if="record.status === '1'">
+              <a-menu-item v-hasPermission="['job:resume']" v-if="record.status === '1'">
                 <a href="javascript:void(0)" @click="resumeJob(record)">恢复任务</a>
               </a-menu-item>
             </a-menu>
           </a-dropdown>
-          <a-badge v-hasNoPermission="'job:update','job:run','job:pause','job:resume'" status="warning" text="无权限"></a-badge>
+          <a-badge v-hasNoPermission="['job:update','job:run','job:pause','job:resume']" status="warning" text="无权限"></a-badge>
         </template>
       </a-table>
     </div>
